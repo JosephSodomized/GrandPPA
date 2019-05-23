@@ -3,8 +3,9 @@ import {
   StyleSheet,
   View,
   Vibration,
-  TouchableOpacity,
-  Image
+  TouchableHighlight,
+  Image,
+  Alert
 } from 'react-native';
 
 import { Container, Header, Content, Button, Text, Left } from 'native-base';
@@ -18,15 +19,22 @@ export default class HomeScreen extends React.Component {
     header: null,
   };
 
+  onPressLogo(){
+    Alert.alert('GrandppA: Projekt wykonany przez:'+`\n`+ `\n`+ ' Karolina Rutkowska'+`\n`+ 'Michał Bałos'+`\n`+ 'Michał Topolski'+`\n`+ 'Dominik Malcharczyk')
+  }
+
   render() {
     const DURATION = 50000;
     const {navigate} = this.props.navigation;
     return (
       <View style={styles.container}>
         <Container style={styles.back}>
-          <Header style={styles.header}>
-          <Image source={require('../assets/images/logo.png')} style={{width: 305, height: 65, marginTop:10}}/>
+        <TouchableHighlight onPress={this.onPressLogo} underlayColor="white">
+        <Header style={styles.header}>
+          <Image  source={require('../assets/images/logo.png')} style={{width: 305, height: 65, marginTop:10}}/>
           </Header>
+        </TouchableHighlight>
+          
           <Content>
             <Grid style={styles.align}>
               <Row>
