@@ -1,16 +1,17 @@
 import React from 'react';
 import {
-  Image,
-  Platform,
-  ScrollView,
   StyleSheet,
-  Text,
-  TouchableOpacity,
   View,
+  Vibration,
+  TouchableOpacity,
+  Image
 } from 'react-native';
-import { WebBrowser } from 'expo';
 
-import { MonoText } from '../components/StyledText';
+import { Container, Header, Content, Button, Text, Left } from 'native-base';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faCapsules, faCogs, faGlobeAmericas, faAmbulance } from '@fortawesome/free-solid-svg-icons'
+import { Col, Row, Grid } from "react-native-easy-grid";
+
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -18,171 +19,101 @@ export default class HomeScreen extends React.Component {
   };
 
   render() {
+    const DURATION = 50000;
+    const {navigate} = this.props.navigation;
     return (
       <View style={styles.container}>
-        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-          <View style={styles.welcomeContainer}>
-            <Image
-              source={
-                __DEV__
-                  ? require('../assets/images/robot-dev.png')
-                  : require('../assets/images/robot-prod.png')
-              }
-              style={styles.welcomeImage}
-            />
-          </View>
-
-          <View style={styles.getStartedContainer}>
-            {this._maybeRenderDevelopmentModeWarning()}
-
-            <Text style={styles.getStartedText}>Get started by opening</Text>
-
-            <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-              <MonoText style={styles.codeHighlightText}>screens/HomeScreen.js</MonoText>
-            </View>
-
-            <Text style={styles.getStartedText}>
-              Change this text and your app will automatically reload.
-            </Text>
-          </View>
-
-          <View style={styles.helpContainer}>
-            <TouchableOpacity onPress={this._handleHelpPress} style={styles.helpLink}>
-              <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-
-        <View style={styles.tabBarInfoContainer}>
-          <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
-
-          <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-            <MonoText style={styles.codeHighlightText}>navigation/MainTabNavigator.js</MonoText>
-          </View>
-        </View>
+        <Container style={styles.back}>
+          <Header style={styles.header}>
+          <Image source={require('../assets/images/logo.png')} style={{width: 305, height: 65, marginTop:10}}/>
+          </Header>
+          <Content>
+            <Grid style={styles.align}>
+              <Row>
+                <Col>
+                    <Button style={styles.button} block warning 
+                    onPress={() => navigate('Meds')}>
+                      <FontAwesomeIcon style={styles.faCapsules} icon={faCapsules} size={90} color="#fff" />
+                      <Text style={styles.TextStyle}>Medicine</Text>
+                    </Button>
+                </Col>
+                <Col>
+                  <Button style={styles.button} block danger
+                  onPress={() => navigate('Help')}>
+                  <FontAwesomeIcon style={styles.faCapsules} icon={faAmbulance} size={90} color="#fff" />
+                  <Text style={styles.TextStyle} color="#fff">Help me!</Text></Button>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Button style={styles.button3} block
+                  onPress={() => navigate('FindMe')}>
+                  <FontAwesomeIcon style={styles.faCapsules} icon={faGlobeAmericas} size={90} color="#fff" />
+                  <Text style={styles.TextStyle}>Find me</Text>
+                  </Button>
+                </Col>
+                <Col>
+                  <Button style={styles.button} block light>
+                  <FontAwesomeIcon style={styles.faCapsules} icon={faCogs} size={90} color="rgba(57,57,57,1)" />
+                  <Text style={styles.TextStyle2}>Settings</Text></Button>
+                </Col>
+              </Row>
+            </Grid>
+          </Content>
+        </Container>
       </View>
     );
   }
-
-  _maybeRenderDevelopmentModeWarning() {
-    if (__DEV__) {
-      const learnMoreButton = (
-        <Text onPress={this._handleLearnMorePress} style={styles.helpLinkText}>
-          Learn more
-        </Text>
-      );
-
-      return (
-        <Text style={styles.developmentModeText}>
-          Development mode is enabled, your app will be slower but you can use useful development
-          tools. {learnMoreButton}
-        </Text>
-      );
-    } else {
-      return (
-        <Text style={styles.developmentModeText}>
-          You are not in development mode, your app will run at full speed.
-        </Text>
-      );
-    }
-  }
-
-  _handleLearnMorePress = () => {
-    WebBrowser.openBrowserAsync('https://docs.expo.io/versions/latest/guides/development-mode');
-  };
-
-  _handleHelpPress = () => {
-    WebBrowser.openBrowserAsync(
-      'https://docs.expo.io/versions/latest/guides/up-and-running.html#can-t-see-your-changes'
-    );
-  };
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(237,199,7,1)',
   },
-  developmentModeText: {
-    marginBottom: 20,
-    color: 'rgba(0,0,0,0.4)',
-    fontSize: 14,
-    lineHeight: 19,
-    textAlign: 'center',
+  header:{
+    backgroundColor: 'rgba(64,64,64,1)',
+    height: 90,
+    padding: 20
   },
-  contentContainer: {
-    paddingTop: 30,
+  back: {
+    backgroundColor: 'rgba(64,64,64,1)'
   },
-  welcomeContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
+  logo: {
+    fontSize: 20,
+    alignSelf: 'center',
+    padding: 50
   },
-  welcomeImage: {
-    width: 100,
-    height: 80,
-    resizeMode: 'contain',
-    marginTop: 3,
-    marginLeft: -10,
+  TextStyle:{
+    display: 'flex',
+    top: 60,
+    fontSize: 30,
+    right: 42,
+    color:'#fff'
   },
-  getStartedContainer: {
-    alignItems: 'center',
-    marginHorizontal: 50,
+  TextStyle2:{
+    display: 'flex',
+    top: 60,
+    fontSize: 30,
+    right: 42,
+    color:'rgba(57,57,57,1)'
   },
-  homeScreenFilename: {
-    marginVertical: 7,
+  align: {
+    margin: 10
   },
-  codeHighlightText: {
-    color: 'rgba(96,100,109, 0.8)',
+  faCapsules:{
+    display: 'flex',
+    left: 70,
+    top: -10
   },
-  codeHighlightContainer: {
-    backgroundColor: 'rgba(0,0,0,0.05)',
-    borderRadius: 3,
-    paddingHorizontal: 4,
+  button: {
+    margin: 1,
+    height: 300,
   },
-  getStartedText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
-    textAlign: 'center',
-  },
-  tabBarInfoContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: { height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-    alignItems: 'center',
-    backgroundColor: '#fbfbfb',
-    paddingVertical: 20,
-  },
-  tabBarInfoText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    textAlign: 'center',
-  },
-  navigationFilename: {
-    marginTop: 5,
-  },
-  helpContainer: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  helpLink: {
-    paddingVertical: 15,
-  },
-  helpLinkText: {
-    fontSize: 14,
-    color: '#2e78b7',
-  },
+  button3: {
+    margin: 1,
+    height: 300,
+    backgroundColor: 'rgba(83,184,87,1)'
+  }
 });
+
