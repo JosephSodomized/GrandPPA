@@ -3,12 +3,13 @@ import {
   StyleSheet,
   View,
   Vibration,
-  TouchableOpacity
+  TouchableOpacity,
+  Image
 } from 'react-native';
 
 import { Container, Header, Content, Button, Text, Left } from 'native-base';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faCapsules } from '@fortawesome/free-solid-svg-icons'
+import { faCapsules, faCogs, faGlobeAmericas, faAmbulance } from '@fortawesome/free-solid-svg-icons'
 import { Col, Row, Grid } from "react-native-easy-grid";
 
 
@@ -22,26 +23,35 @@ export default class HomeScreen extends React.Component {
     return (
       <View style={styles.container}>
         <Container style={styles.back}>
-          <Header><Text>GrandPPA</Text></Header>
+          <Header style={styles.header}>
+          <Image source={require('../assets/images/logo.png')} style={{width: 305, height: 65, marginTop:10}}/>
+          </Header>
           <Content>
             <Grid style={styles.align}>
               <Row>
                 <Col>
-                    <Button style={styles.button} block info>
-                      <Text>Medicine</Text>
-                      <FontAwesomeIcon icon={faCapsules} size={40} color="#ffff" />
+                    <Button style={styles.button} block warning>
+                      <FontAwesomeIcon style={styles.faCapsules} icon={faCapsules} size={90} color="#fff" />
+                      <Text style={styles.TextStyle}>Medicine</Text>
                     </Button>
                 </Col>
                 <Col>
-                  <Button style={styles.button} block warning><Text>Help me!</Text></Button>
+                  <Button style={styles.button} block danger>
+                  <FontAwesomeIcon style={styles.faCapsules} icon={faAmbulance} size={90} color="#fff" />
+                  <Text style={styles.TextStyle} color="#fff">Help me!</Text></Button>
                 </Col>
               </Row>
               <Row>
                 <Col>
-                  <Button style={styles.button} block light><Text>Find me</Text></Button>
+                  <Button style={styles.button3} block>
+                  <FontAwesomeIcon style={styles.faCapsules} icon={faGlobeAmericas} size={90} color="#fff" />
+                  <Text style={styles.TextStyle}>Find me</Text>
+                  </Button>
                 </Col>
                 <Col>
-                  <Button style={styles.button} block dark><Text>Settings</Text></Button>
+                  <Button style={styles.button} block light>
+                  <FontAwesomeIcon style={styles.faCapsules} icon={faCogs} size={90} color="rgba(57,57,57,1)" />
+                  <Text style={styles.TextStyle2}>Settings</Text></Button>
                 </Col>
               </Row>
             </Grid>
@@ -57,20 +67,49 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(237,199,7,1)',
   },
+  header:{
+    backgroundColor: 'rgba(64,64,64,1)',
+    height: 90,
+    padding: 20
+  },
   back: {
-    backgroundColor: 'rgba(242,233,209,1)'
+    backgroundColor: 'rgba(64,64,64,1)'
   },
   logo: {
     fontSize: 20,
     alignSelf: 'center',
     padding: 50
   },
+  TextStyle:{
+    display: 'flex',
+    top: 60,
+    fontSize: 30,
+    right: 42,
+    color:'#fff'
+  },
+  TextStyle2:{
+    display: 'flex',
+    top: 60,
+    fontSize: 30,
+    right: 42,
+    color:'rgba(57,57,57,1)'
+  },
   align: {
     margin: 10
   },
+  faCapsules:{
+    display: 'flex',
+    left: 70,
+    top: -10
+  },
   button: {
     margin: 1,
-    height: 300
+    height: 300,
+  },
+  button3: {
+    margin: 1,
+    height: 300,
+    backgroundColor: 'rgba(83,184,87,1)'
   }
 });
 
