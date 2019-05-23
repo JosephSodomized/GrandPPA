@@ -27,33 +27,36 @@ export default class AuthenticationScreen extends React.Component {
   }
 
   async loginWithGoogle(navigate) {
-    const clientId = clientid;
-    const { type, accessToken, user } = await Google.logInAsync({ clientId });
-    if (type === "success") {
-      navigate("Home");
-    }
+    // const clientId = clientid;
+    // const { type, accessToken, user } = await Google.logInAsync({ clientId });
+    // if (type === "success") {
+    //   navigate("Home");
+    // }
+    navigate("Home");
   }
 
   register(email, password, navigate) {
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then(() => navigate("Home"))
-      .catch(function(error) {
-        alert("Coś poszło nie tak, spróbuj jeszcze raz!");
-        console.log(error.message);
-      });
+    // firebase
+    //   .auth()
+    //   .createUserWithEmailAndPassword(email, password)
+    //   .then(() => navigate("Home"))
+    //   .catch(function(error) {
+    //     alert("Coś poszło nie tak, spróbuj jeszcze raz!");
+    //     console.log(error.message);
+    //   });
+    navigate("Home");
   }
 
   login(email, password, navigate) {
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(() => navigate("Home"))
-      .catch(function(error) {
-        alert("Coś poszło nie tak, spróbuj jeszcze raz!");
-        console.log(error.message);
-      });
+    // firebase
+    //   .auth()
+    //   .signInWithEmailAndPassword(email, password)
+    //   .then(() => navigate("Home"))
+    //   .catch(function(error) {
+    //     alert("Coś poszło nie tak, spróbuj jeszcze raz!");
+    //     console.log(error.message);
+    //   });
+    navigate("Home");
   }
 
   handleChange = name => text => {
@@ -62,7 +65,7 @@ export default class AuthenticationScreen extends React.Component {
   };
 
   render() {
-    const {navigate} = this.props.navigation;
+    const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
         <Container>
@@ -106,7 +109,11 @@ export default class AuthenticationScreen extends React.Component {
                     rounded
                     info
                     onPress={() => {
-                      this.login(this.state.email, this.state.password, navigate);
+                      this.login(
+                        this.state.email,
+                        this.state.password,
+                        navigate
+                      );
                     }}
                     style={styles.authButton}
                   >
@@ -126,7 +133,11 @@ export default class AuthenticationScreen extends React.Component {
                     rounded
                     info
                     onPress={() => {
-                      this.register(this.state.email, this.state.password, navigate);
+                      this.register(
+                        this.state.email,
+                        this.state.password,
+                        navigate
+                      );
                     }}
                     style={styles.authButton}
                   >
