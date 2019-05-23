@@ -20,7 +20,7 @@ export default class HomeScreen extends React.Component {
   };
 
   onPressLogo(){
-    Alert.alert('GrandppA: Projekt wykonany przez:'+`\n`+ `\n`+ ' Karolina Rutkowska'+`\n`+ 'Michał Bałos'+`\n`+ 'Michał Topolski'+`\n`+ 'Dominik Malcharczyk')
+    Alert.alert('GrandppA: Projekt wykonany przez:'+`\n`+ `\n`+ ' Karolina Rutkowska'+`\n`+ 'Michał Bałos'+`\n`+ 'Michał Topolski'+`\n`+ 'Dominik Malcharczyk');
   }
 
   render() {
