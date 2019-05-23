@@ -20,6 +20,7 @@ export default class HomeScreen extends React.Component {
 
   render() {
     const DURATION = 50000;
+    const {navigate} = this.props.navigation;
     return (
       <View style={styles.container}>
         <Container style={styles.back}>
@@ -30,7 +31,8 @@ export default class HomeScreen extends React.Component {
             <Grid style={styles.align}>
               <Row>
                 <Col>
-                    <Button style={styles.button} block warning>
+                    <Button style={styles.button} block warning 
+                    onPress={() => navigate('Meds', {name: 'Jane'})}>
                       <FontAwesomeIcon style={styles.faCapsules} icon={faCapsules} size={90} color="#fff" />
                       <Text style={styles.TextStyle}>Medicine</Text>
                     </Button>
