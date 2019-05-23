@@ -34,13 +34,30 @@ export default class MedsScreen extends React.Component {
     });
   }
 
+  getMedFromFirestore(email) {
+    db = firebase.firestore();
+    let docRef = db.collection("usermeds").doc(email);
+    docRef
+      .get()
+      .then(function(doc) {
+        if (doc.exists) {
+          console.log("Document data:", doc.data());
+        } else {
+          console.log("No such document!");
+        }
+      })
+      .catch(function(error) {
+        console.log("Error getting document:", error);
+      });
+  }
+
   render() {
     return (
       <Button
         rounded
         info
         onPress={() => {
-          this.addMedToFirestore();
+          this.getMedFromFirestore("testdrugi");
         }}
       >
         <Text>AddMed</Text>
