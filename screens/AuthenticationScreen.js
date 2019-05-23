@@ -26,30 +26,30 @@ export default class AuthenticationScreen extends React.Component {
     };
   }
 
-  async loginWithGoogle() {
+  async loginWithGoogle(navigate) {
     const clientId = clientid;
     const { type, accessToken, user } = await Google.logInAsync({ clientId });
     if (type === "success") {
-      //redirect
+      navigate("Home");
     }
   }
 
-  register(email, password) {
+  register(email, password, navigate) {
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
-      .then(console.log("udało się"))
+      .then(() => navigate("Home"))
       .catch(function(error) {
         alert("Coś poszło nie tak, spróbuj jeszcze raz!");
         console.log(error.message);
       });
   }
 
-  login(email, password) {
+  login(email, password, navigate) {
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then()
+      .then(() => navigate("Home"))
       .catch(function(error) {
         alert("Coś poszło nie tak, spróbuj jeszcze raz!");
         console.log(error.message);
@@ -62,6 +62,7 @@ export default class AuthenticationScreen extends React.Component {
   };
 
   render() {
+    const {navigate} = this.props.navigation;
     return (
       <View style={styles.container}>
         <Container>
@@ -105,7 +106,7 @@ export default class AuthenticationScreen extends React.Component {
                     rounded
                     info
                     onPress={() => {
-                      this.login(this.state.email, this.state.password);
+                      this.login(this.state.email, this.state.password, navigate);
                     }}
                     style={styles.authButton}
                   >
@@ -125,7 +126,7 @@ export default class AuthenticationScreen extends React.Component {
                     rounded
                     info
                     onPress={() => {
-                      this.register(this.state.email, this.state.password);
+                      this.register(this.state.email, this.state.password, navigate);
                     }}
                     style={styles.authButton}
                   >
@@ -165,7 +166,7 @@ export default class AuthenticationScreen extends React.Component {
                   <Button
                     rounded
                     danger
-                    onPress={this.loginWithGoogle}
+                    onPress={() => this.loginWithGoogle(navigate)}
                     style={styles.authButton}
                   >
                     <Icon
