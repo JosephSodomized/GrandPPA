@@ -32,20 +32,22 @@ export default class HomeScreen extends React.Component {
               <Row>
                 <Col>
                     <Button style={styles.button} block warning 
-                    onPress={() => navigate('Meds', {name: 'Jane'})}>
+                    onPress={() => navigate('Meds')}>
                       <FontAwesomeIcon style={styles.faCapsules} icon={faCapsules} size={90} color="#fff" />
                       <Text style={styles.TextStyle}>Medicine</Text>
                     </Button>
                 </Col>
                 <Col>
-                  <Button style={styles.button} block danger>
+                  <Button style={styles.button} block danger
+                  onPress={() => navigate('Help')}>
                   <FontAwesomeIcon style={styles.faCapsules} icon={faAmbulance} size={90} color="#fff" />
                   <Text style={styles.TextStyle} color="#fff">Help me!</Text></Button>
                 </Col>
               </Row>
               <Row>
                 <Col>
-                  <Button style={styles.button3} block>
+                  <Button style={styles.button3} block
+                  onPress={() => navigate('FindMe')}>
                   <FontAwesomeIcon style={styles.faCapsules} icon={faGlobeAmericas} size={90} color="#fff" />
                   <Text style={styles.TextStyle}>Find me</Text>
                   </Button>

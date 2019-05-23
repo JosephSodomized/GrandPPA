@@ -4,12 +4,12 @@ import { ExpoLinksView } from '@expo/samples';
 
 export default class MedsScreen extends React.Component {
   static navigationOptions = {
-    title: 'Meds kurwa',
+    title: 'Medicine',
   };
 
   render() {
     return (
-      <Text>Meds Screen</Text>
+      <Text>Meds</Text>
     );
   }
 }
