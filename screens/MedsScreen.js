@@ -27,13 +27,28 @@ import {
   Form,
   Input,
   Label,
-  Item
+  Item,
+  Picker
 } from "native-base";
 import { LinearGradient } from "expo";
+import { Dropdown } from "react-native-material-dropdown";
+
+import hoursOfDay from "../constants/hoursOfDay";
+import daysOfWeek from "../constants/daysOfWeek";
+
+import { TextField } from "react-native-material-textfield";
 
 import firebaseConfig from "../firebaseConfig";
 
 let db;
+const brandNameAPI =
+  "https://api.fda.gov/drug/label.json?search=openfda.brand_name:";
+const genericNameAPI =
+  "https://api.fda.gov/drug/label.json?search=openfda.generic_name:";
+const manufacturerNameAPI =
+  "https://api.fda.gov/drug/label.json?search=openfda.manufacturer_name:";
+const substanceNameAPI =
+  "https://api.fda.gov/drug/label.json?search=openfda.substance_name:";
 export default class MedsScreen extends React.Component {
   static navigationOptions = {
     title: "Medicine"
@@ -46,9 +61,12 @@ export default class MedsScreen extends React.Component {
       email: "testdrugi",
       modalVisible: false,
       medName: "",
-      dayOfWeek: "",
+      date: "",
       time: "",
-      amount: ""
+      amount: "",
+      daysOfWeek: daysOfWeek,
+      hoursOfDay: hoursOfDay,
+      medInfo: ""
     };
   }
 
@@ -72,6 +90,7 @@ export default class MedsScreen extends React.Component {
               amount: amount
             })
           });
+          this.getMedInfoFromAPI(name);
           this.getMedFromFirestore("testdrugi");
         });
       } else {
@@ -86,6 +105,7 @@ export default class MedsScreen extends React.Component {
             })
           });
         });
+        this.getMedInfoFromAPI(name);
         this.getMedFromFirestore();
       }
     });
@@ -130,15 +150,39 @@ export default class MedsScreen extends React.Component {
     this.getMedFromFirestore(this.state.email);
   }
 
+  getMedInfoFromAPI(name) {
+    console.log("hahahhaha");
+    console.log(`${brandNameAPI}"${name}"`);
+    fetch(`${brandNameAPI}"${name}"`)
+      .then(response => console.log(response))
+      .catch(
+        fetch(`${genericNameAPI}"${name}"`)
+          .then(data => this.setState({ medInfo: data }))
+          .catch(
+            fetch(`${manufacturerNameAPI}"${name}"`)
+              .then(data => this.setState({ medInfo: data }))
+              .catch(
+                fetch(`${manufacturerNameAPI}"${name}"`)
+                  .then(data => this.setState({ medInfo: data }))
+                  .catch(this.setState({ medInfo: "" }))
+              )
+          )
+      );
+  }
+
   render() {
     const MedicinesList = this.state.medicines.map((item, index) => (
       <ListItem icon key={index} title={item.name}>
         <Left>
-          <Icon type="AntDesign" name="question" ios="question" />
+          <Icon type="AntDesign" name="question" ios="question" onPress={() => console.log(this.state.medInfo)}/>
         </Left>
         <Body>
-          <Text>{item.name} {item.amount} - pills</Text>
-          <Text note>{item.date} {item.time}</Text>
+          <Text>
+            {item.name} {item.amount} - pills
+          </Text>
+          <Text note>
+            {item.date} {item.time}
+          </Text>
         </Body>
         <Right>
           <Icon
@@ -163,6 +207,9 @@ export default class MedsScreen extends React.Component {
       <View style={{ flex: 1 }}>
         <Container>
           <Grid>
+            <Row style={{ height: "5%" }}>
+              <Col />
+            </Row>
             <Row style={{ height: "20%" }}>
               <Col>
                 <Button
@@ -193,50 +240,44 @@ export default class MedsScreen extends React.Component {
             </Row>
             <Row style={styles.inputRow}>
               <Col>
-                <Item>
-                  <Input
-                    placeholder="Medicine name"
-                    placeholderTextColor="black"
-                    textColor="black"
-                    onChangeText={medName => this.setState({ medName })}
-                  />
-                </Item>
+                <TextField
+                  label="Medicine name"
+                  onChangeText={medName => this.setState({ medName })}
+                  baseColor="black"
+                  tintColor="black"
+                />
               </Col>
             </Row>
             <Row style={styles.inputRow}>
               <Col>
-                <Item>
-                  <Input
-                    placeholder="Day of week"
-                    placeholderTextColor="black"
-                    textColor="black"
-                    onChangeText={dayOfWeek => this.setState({ dayOfWeek })}
-                  />
-                </Item>
+                <TextField
+                  label="Pills amount"
+                  onChangeText={amount => this.setState({ amount })}
+                  baseColor="black"
+                  tintColor="black"
+                />
               </Col>
             </Row>
             <Row style={styles.inputRow}>
               <Col>
-                <Item>
-                  <Input
-                    placeholder="Time"
-                    placeholderTextColor="black"
-                    textColor="black"
-                    onChangeText={time => this.setState({ time })}
-                  />
-                </Item>
+                <Dropdown
+                  label="Day of week"
+                  data={this.state.daysOfWeek}
+                  onChangeText={dayOfWeek => this.setState({ date: dayOfWeek })}
+                  baseColor="black"
+                  textColor="black"
+                />
               </Col>
             </Row>
             <Row style={styles.inputRow}>
               <Col>
-                <Item>
-                  <Input
-                    placeholder="Pills amount"
-                    placeholderTextColor="black"
-                    textColor="black"
-                    onChangeText={amount => this.setState({ amount })}
-                  />
-                </Item>
+                <Dropdown
+                  label="Time"
+                  data={this.state.hoursOfDay}
+                  onChangeText={time => this.setState({ time })}
+                  baseColor="black"
+                  textColor="black"
+                />
               </Col>
             </Row>
             <Row style={styles.inputRow}>
@@ -248,7 +289,7 @@ export default class MedsScreen extends React.Component {
                     this.addMedToFirestore(
                       this.state.email,
                       this.state.medName,
-                      this.state.dayOfWeek,
+                      this.state.date,
                       this.state.time,
                       this.state.amount
                     );
@@ -290,6 +331,12 @@ const styles = StyleSheet.create({
   },
   inputRow: {
     height: "10%",
+    width: "75%",
+    marginLeft: "auto",
+    marginRight: "auto"
+  },
+  dateRow: {
+    height: "15%",
     width: "75%",
     marginLeft: "auto",
     marginRight: "auto"
