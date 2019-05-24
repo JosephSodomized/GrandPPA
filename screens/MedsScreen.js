@@ -74,10 +74,12 @@ export default class MedsScreen extends React.Component {
     this.setState({ modalVisible: visible });
   }
 
-  addMedToFirestore(email, name, date, time, amount) {
+  addMedToFirestore(email, name, date, time, amount, medInfo) {
     db = firebase.firestore();
     let usermeds = db.collection("usermeds");
     const usersRef = usermeds.doc(email);
+
+    console.log(medInfo);
 
     usersRef.get().then(docSnapshot => {
       if (docSnapshot.exists) {
@@ -87,11 +89,11 @@ export default class MedsScreen extends React.Component {
               name: name,
               date: date,
               time: time,
-              amount: amount
+              amount: amount,
+              medInfo: medInfo
             })
           });
-          this.getMedInfoFromAPI(name);
-          this.getMedFromFirestore("testdrugi");
+          this.getMedFromFirestore(this.state.email);
         });
       } else {
         usersRef.set({ medicines: [] });
@@ -101,12 +103,12 @@ export default class MedsScreen extends React.Component {
               name: name,
               date: date,
               time: time,
-              amount: amount
+              amount: amount,
+              medInfo: medInfo
             })
           });
         });
-        this.getMedInfoFromAPI(name);
-        this.getMedFromFirestore();
+        this.getMedFromFirestore(this.state.email);
       }
     });
   }
@@ -150,21 +152,68 @@ export default class MedsScreen extends React.Component {
     this.getMedFromFirestore(this.state.email);
   }
 
-  getMedInfoFromAPI(name) {
-    console.log("hahahhaha");
-    console.log(`${brandNameAPI}"${name}"`);
+  getMedInfoFromAPI(email, name, date, time, amount) {
     fetch(`${brandNameAPI}"${name}"`)
-      .then(response => console.log(response))
+      .then(response => response.json())
+      .then(respJson =>
+        this.addMedToFirestore(
+          email,
+          name,
+          date,
+          time,
+          amount,
+          respJson.results[0].indications_and_usage
+        )
+      )
       .catch(
         fetch(`${genericNameAPI}"${name}"`)
-          .then(data => this.setState({ medInfo: data }))
+          .then(response => response.json())
+          .then(respJson =>
+            this.addMedToFirestore(
+              email,
+              name,
+              date,
+              time,
+              amount,
+              respJson.results[0].indications_and_usage
+            )
+          )
           .catch(
             fetch(`${manufacturerNameAPI}"${name}"`)
-              .then(data => this.setState({ medInfo: data }))
+              .then(response => response.json())
+              .then(respJson =>
+                this.addMedToFirestore(
+                  email,
+                  name,
+                  date,
+                  time,
+                  amount,
+                  respJson.results[0].indications_and_usage
+                )
+              )
               .catch(
                 fetch(`${manufacturerNameAPI}"${name}"`)
-                  .then(data => this.setState({ medInfo: data }))
-                  .catch(this.setState({ medInfo: "" }))
+                  .then(response => response.json())
+                  .then(respJson =>
+                    this.addMedToFirestore(
+                      email,
+                      name,
+                      date,
+                      time,
+                      amount,
+                      respJson.results[0].indications_and_usage
+                    )
+                  )
+                  .catch(() =>
+                    this.addMedToFirestore(
+                      email,
+                      name,
+                      date,
+                      time,
+                      amount,
+                      "There is no such med in the database"
+                    )
+                  )
               )
           )
       );
@@ -174,11 +223,16 @@ export default class MedsScreen extends React.Component {
     const MedicinesList = this.state.medicines.map((item, index) => (
       <ListItem icon key={index} title={item.name}>
         <Left>
-          <Icon type="AntDesign" name="question" ios="question" onPress={() => console.log(this.state.medInfo)}/>
+          <Icon
+            type="AntDesign"
+            name="question"
+            ios="question"
+            onPress={() => alert(item.medInfo)}
+          />
         </Left>
         <Body>
           <Text>
-            {item.name} {item.amount} - pills
+            {item.name} - {item.amount} pills
           </Text>
           <Text note>
             {item.date} {item.time}
@@ -286,7 +340,7 @@ export default class MedsScreen extends React.Component {
                   rounded
                   light
                   onPress={() => {
-                    this.addMedToFirestore(
+                    this.getMedInfoFromAPI(
                       this.state.email,
                       this.state.medName,
                       this.state.date,
