@@ -6,6 +6,7 @@ import {
   TouchableHighlight,
   Image,
   Alert,
+  Linking
 } from 'react-native';
 import { Container, Header, Content, Button, Text, Left } from 'native-base';
 import { Col, Row, Grid } from "react-native-easy-grid";
@@ -20,14 +21,13 @@ export default class HelpScreen extends React.Component {
   constructor(props) {
     super();
     this.state = {
-      text: 'test'
+      ambulanceNr: '112',
+      text: 'Call ambulance'
     }
   }
 
   callAmbulance() {
-    this.setState({
-      text: 'changed'
-    });
+    Linking.openURL(`tel:${this.state.ambulanceNr}`)
   }
 
   render() {
@@ -46,9 +46,9 @@ export default class HelpScreen extends React.Component {
             <Grid style={styles.align}>
               <Row>
                 <Col>
-                    <Button style={styles.button} block warning 
+                    <Button style={styles.button} block danger 
                     onPress={() => this.callAmbulance()}>
-                      <FontAwesomeIcon style={styles.faCapsules} icon={faCapsules} size={90} color="#fff" />
+                      <FontAwesomeIcon style={styles.faCapsules} icon={faAmbulance} size={90} color="#fff" />
                       <Text style={styles.TextStyle}>{this.state.text}</Text>
                     </Button>
                 </Col>
