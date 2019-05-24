@@ -21,7 +21,29 @@ class AddContact extends Component {
         };
       }
 
+      
+
     render () {
+
+      const nameReg = new RegExp("^[a-zA-Z]+$");
+      
+
+      numberValidationHandler = (number) => {
+        
+        const numberReg = /^[0-9]*$/gm;
+        return number.test(numberReg);
+      }
+
+      submitHandler = () => {
+        if (!this.numberValidationHandler(this.state.number)) {
+                // not vaild
+                alert('not valid');
+        } else {
+                //valid
+                alert('valid');
+        }
+      }
+
         return(
             <ScrollView>
                 <View style={styles.container}> 
@@ -42,7 +64,7 @@ class AddContact extends Component {
                     />
                     <Text></Text>
                     
-                    <Button style={styles.button}>
+                    <Button style={styles.button} onSubmit={this.submitHandler} >
                         <Text style={styles.text}>Submit</Text>
                     </Button>
                     </Col>
