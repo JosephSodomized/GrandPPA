@@ -61,7 +61,8 @@ export default class HomeScreen extends React.Component {
                   </Button>
                 </Col>
                 <Col>
-                  <Button style={styles.button} block light>
+                  <Button style={styles.button} block light
+                  onPress={() => navigate('Settings')}>
                   <FontAwesomeIcon style={styles.faCapsules} icon={faCogs} size={90} color="rgba(57,57,57,1)" />
                   <Text style={styles.TextStyle2}>Settings</Text></Button>
                 </Col>
