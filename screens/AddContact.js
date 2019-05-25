@@ -33,10 +33,12 @@ class AddContact extends Component {
 
         if (!this.state.isValid) {
                 // not vaild
-                Alert.alert('not valid', 'not valid');
+                Alert.alert('Number not valid', 'Please enter a 9 digits number',
+                [
+                    {text: 'OK', onPress: () => console.log('Cancel Pressed'), style: 'cancel'}
+                ]);
         } else {
                 //valid
-                Alert.alert('valid', 'not valid');
         }
       }
 
