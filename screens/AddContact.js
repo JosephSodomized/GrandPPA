@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, TextInput, AppRegistry } from 'react-native';
+import { StyleSheet, View, Image, TextInput, AppRegistry, Alert, TouchableOpacity } from 'react-native';
 import { Container, Header, Content, Button, Text, Left} from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Col, Row, Grid } from "react-native-easy-grid";
+import Input from '../components/Input';
 
 class AddContact extends Component {
     static navigationOptions = {
@@ -13,36 +14,42 @@ class AddContact extends Component {
     headerTintColor: '#fff',
     };
 
-    constructor(props) {
-        super(props);
-        this.state = { 
-            name: 'Contact name ', 
-            number: 'Phone number'
-        };
+    state = {
+        name: '', 
+        number: '',
+        isValid: null,
+      }
+
+      
+      
+      submitHandler = (name, number) => {
+        
+        const numberReg = new RegExp('(?:\d{9})');
+        const nameReg = new RegExp("^[a-zA-Z]+$");
+
+        testNom = this.state.testNo;
+
+       // numberTest = testNom.exec(numberReg);
+
+        if (!this.state.isValid) {
+                // not vaild
+                Alert.alert('not valid', 'not valid');
+        } else {
+                //valid
+                Alert.alert('valid', 'not valid');
+        }
       }
 
       
 
     render () {
 
-      const nameReg = new RegExp("^[a-zA-Z]+$");
-      
-
-      numberValidationHandler = (number) => {
-        
-        const numberReg = /^[0-9]*$/gm;
-        return number.test(numberReg);
-      }
-
-      submitHandler = () => {
-        if (!this.numberValidationHandler(this.state.number)) {
-                // not vaild
-                alert('not valid');
-        } else {
-                //valid
-                alert('valid');
-        }
-      }
+        const { isValid } = this.state;
+        const { name } = this.state;
+        const { number } = this.state;
+        console.log('isValid', isValid);
+        console.log(name);
+        console.log(number);
 
         return(
             <ScrollView>
@@ -52,19 +59,25 @@ class AddContact extends Component {
                     <Text style={styles.text}>Add new contact</Text>
                     <Text></Text>
                     <TextInput
+                        placeholder="Contact name"
                         style={styles.textInput}
                         onChangeText={(name) => this.setState({name})}
                         value={this.state.name}
                     />
-                    <Text></Text>
-                    <TextInput
-                        style={styles.textInput}
-                        onChangeText={(number) => this.setState({number})}
-                        value={this.state.number}
-                    />
+                    
                     <Text></Text>
                     
-                    <Button style={styles.button} onSubmit={this.submitHandler} >
+                    <Input 
+                        placeholder="Contact number"
+                        style={styles.textInput}
+                        pattern={'^[0-9]{9}$' /* only nummbers */ }
+                        onValidation={isValid => this.setState({ isValid })} 
+                        onChangeText={(number) => this.setState({number})}
+                        value={this.state.number}
+                        />
+                    <Text></Text>
+                    
+                    <Button style={styles.button} onPress={() => this.submitHandler(this.state.name.value, this.state.number.value)} >
                         <Text style={styles.text}>Submit</Text>
                     </Button>
                     </Col>
@@ -123,6 +136,15 @@ const styles = StyleSheet.create({
       submitButton: {
         paddingHorizontal: 10,
         paddingTop: 20,
+      },
+      input: {
+        height: 48,
+        width: '80%',
+        padding: 8,
+        margin: 16,
+        borderColor: 'gray',
+        borderWidth: StyleSheet.hairlineWidth,
+        borderRadius: 8,
       },
 
     
