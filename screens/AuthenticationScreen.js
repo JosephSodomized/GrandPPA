@@ -27,36 +27,35 @@ export default class AuthenticationScreen extends React.Component {
   }
 
   async loginWithGoogle(navigate) {
-    // const clientId = clientid;
-    // const { type, accessToken, user } = await Google.logInAsync({ clientId });
-    // if (type === "success") {
-    //   navigate("Home");
-    // }
-    navigate("Home");
+    const clientId = clientid;
+    const { type, accessToken, user } = await Google.logInAsync({ clientId });
+    if (type === "success") {
+      navigate("Home", {email: user.email});
+    }
   }
 
   register(email, password, navigate) {
-    // firebase
-    //   .auth()
-    //   .createUserWithEmailAndPassword(email, password)
-    //   .then(() => navigate("Home"))
-    //   .catch(function(error) {
-    //     alert("Coś poszło nie tak, spróbuj jeszcze raz!");
-    //     console.log(error.message);
-    //   });
-    navigate("Home");
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(() => navigate("Home", {email}))
+      .catch(function(err) {
+        alert("Coś poszło nie tak, spróbuj jeszcze raz!");
+        console.log(err.message);
+      });
+    // navigate("Home");
   }
 
   login(email, password, navigate) {
-    // firebase
-    //   .auth()
-    //   .signInWithEmailAndPassword(email, password)
-    //   .then(() => navigate("Home"))
-    //   .catch(function(error) {
-    //     alert("Coś poszło nie tak, spróbuj jeszcze raz!");
-    //     console.log(error.message);
-    //   });
-    navigate("Home");
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(navigate("Home", {email}))
+      .catch(function(err) {
+        alert("Coś poszło nie tak, spróbuj jeszcze raz!");
+        console.log(err.message);
+      });
+    // navigate("Home");
   }
 
   handleChange = name => text => {

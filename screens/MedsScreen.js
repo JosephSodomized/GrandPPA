@@ -55,11 +55,11 @@ export default class MedsScreen extends React.Component {
     title: "Medicine"
   };
 
-  constructor(...args) {
-    super(...args);
+  constructor(props) {
+    super(props);
     this.state = {
       medicines: [],
-      email: "testdrugi",
+      email: props.navigation.state.params.email,
       modalVisible: false,
       medName: "",
       date: "",
@@ -112,7 +112,7 @@ export default class MedsScreen extends React.Component {
             })
           });
         });
-        this.getMedFromFirestore(this.state.email);
+        this.getMedFromFirestore(this.state.email, true);
       }
     });
   }
@@ -136,11 +136,12 @@ export default class MedsScreen extends React.Component {
             }
           );
         } else {
+          if (spinner) this.setSpinnerVisible(false);
           console.log("No such document!");
         }
       })
-      .catch(function(error) {
-        console.log("Error getting document:", error);
+      .catch(function(err) {
+        console.log("Error getting document:", err);
       });
   };
 
@@ -324,6 +325,7 @@ export default class MedsScreen extends React.Component {
                   placeholderTextColor="black"
                   textColor="black"
                   placeholder="Pills amount"
+                  keyboardType="numeric"
                   onChangeText={amount => this.setState({ amount })}
                 />
               </Col>
