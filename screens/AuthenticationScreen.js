@@ -32,6 +32,7 @@ export default class AuthenticationScreen extends React.Component {
     if (type === "success") {
       navigate("Home", {email: user.email});
     }
+    // navigate("Home", {email: "michal.kacper.balos@gmail.com"})
   }
 
   register(email, password, navigate) {
@@ -43,7 +44,7 @@ export default class AuthenticationScreen extends React.Component {
         alert("Coś poszło nie tak, spróbuj jeszcze raz!");
         console.log(err.message);
       });
-    // navigate("Home");
+    // navigate("Home", {email: "michal.kacper.balos@gmail.com"})
   }
 
   login(email, password, navigate) {
@@ -55,7 +56,7 @@ export default class AuthenticationScreen extends React.Component {
         alert("Coś poszło nie tak, spróbuj jeszcze raz!");
         console.log(err.message);
       });
-    // navigate("Home");
+    // navigate("Home", {email: "michal.kacper.balos@gmail.com"})
   }
 
   handleChange = name => text => {
