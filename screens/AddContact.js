@@ -4,6 +4,7 @@ import { Container, Header, Content, Button, Text, Left} from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import Input from '../components/Input';
+import firebaseConfig from '../firebaseConfig';
 
 class AddContact extends Component {
     static navigationOptions = {
@@ -15,32 +16,86 @@ class AddContact extends Component {
     };
 
     state = {
-        name: '', 
-        number: '',
+        name: null, 
+        number: null,
         isValid: null,
+        isSubmited: false,
       }
 
       
       
       submitHandler = (name, number) => {
         
-        const numberReg = new RegExp('(?:\d{9})');
-        const nameReg = new RegExp("^[a-zA-Z]+$");
-
-        testNom = this.state.testNo;
-
-       // numberTest = testNom.exec(numberReg);
-
-        if (!this.state.isValid) {
+        if (name===null || number===null) {
+            Alert.alert('No values added', 'Please enter a name and a contact number before submiting',
+                [
+                    {text: 'OK', onPress: () => console.log('Cancel Pressed'), style: 'cancel'}
+                ]);
+        }
+        else if (!this.state.isValid) {
                 // not vaild
                 Alert.alert('Number not valid', 'Please enter a 9 digits number',
                 [
                     {text: 'OK', onPress: () => console.log('Cancel Pressed'), style: 'cancel'}
                 ]);
         } else {
-                //valid
+                //valid HERE WILL BE THE ADDCONTACT FUNC
+                console.log('im a consol log before function call');
+                this.addContact(name, number);
         }
       }
+
+      addContact = (name, mobile) => {
+          /* To add contact there must be:
+            -   a login token that connects user with his contact,
+            -   a post request that sends data to the server,
+            -   a control get to see what's in there
+            -   an alert saying about success or error */
+
+            if(name!=null && mobile!=null){
+
+                console.log('Adding contact process started');
+                fetch(firebaseConfig.databaseURL + '/contacts/contacts_list.json', {
+                method:'POST',
+                headers: {
+                Accept:'application/json',
+                'Content-Type':'application/json',
+               },
+                body:JSON.stringify({
+                 "name":name,
+                 "mobile":mobile,
+                 }),
+                })
+                .catch((error) => console.log(error))
+                .then((response) => console.log(response))
+               .then((responseData) => {
+                 if(responseData.name !=null ){
+                 this.setState({
+                 name:null,
+                 mobile:null,
+                 isSubmited:true,
+                })
+                
+                console.log("post method executed");
+              }
+             else{
+               Alert.alert(
+                'Oops !',
+                'Something went wrong',[
+                 {text: 'OK', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},],
+                { cancelable: false })
+              }
+             })
+             .done();
+             }
+             else{
+               Alert.alert(
+                'Oops !',
+                'Press SUBMIT button after entering your message',[
+                {text: 'OK', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},],
+                { cancelable: false })
+                }
+             };
 
       
 
@@ -76,10 +131,11 @@ class AddContact extends Component {
                         onValidation={isValid => this.setState({ isValid })} 
                         onChangeText={(number) => this.setState({number})}
                         value={this.state.number}
+                        keyboardType = {'phone-pad'}
                         />
                     <Text></Text>
                     
-                    <Button style={styles.button} onPress={() => this.submitHandler(this.state.name.value, this.state.number.value)} >
+                    <Button style={styles.button} onPress={() => this.submitHandler(this.state.name, this.state.number)} >
                         <Text style={styles.text}>Submit</Text>
                     </Button>
                     </Col>
