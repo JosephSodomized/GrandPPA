@@ -28,7 +28,8 @@ import {
   Input,
   Label,
   Item,
-  Picker
+  Picker,
+  Spinner
 } from "native-base";
 import { LinearGradient } from "expo";
 import { Dropdown } from "react-native-material-dropdown";
@@ -66,7 +67,8 @@ export default class MedsScreen extends React.Component {
       amount: "",
       daysOfWeek: daysOfWeek,
       hoursOfDay: hoursOfDay,
-      medInfo: ""
+      medInfo: "",
+      spinner: true
     };
   }
 
@@ -74,12 +76,14 @@ export default class MedsScreen extends React.Component {
     this.setState({ modalVisible: visible });
   }
 
+  setSpinnerVisible(spinner) {
+    this.setState({ spinnerVisible: spinner });
+  }
+
   addMedToFirestore(email, name, date, time, amount, medInfo) {
     db = firebase.firestore();
     let usermeds = db.collection("usermeds");
     const usersRef = usermeds.doc(email);
-
-    console.log(medInfo);
 
     usersRef.get().then(docSnapshot => {
       if (docSnapshot.exists) {
@@ -113,7 +117,9 @@ export default class MedsScreen extends React.Component {
     });
   }
 
-  getMedFromFirestore = email => {
+  getMedFromFirestore = (email, spinner) => {
+    if (spinner) this.setSpinnerVisible(true);
+
     db = firebase.firestore();
     let docRef = db.collection("usermeds").doc(email);
     docRef
@@ -121,9 +127,14 @@ export default class MedsScreen extends React.Component {
       .then(doc => {
         if (doc.exists) {
           let data = doc.data();
-          this.setState({
-            medicines: data.medicines
-          });
+          this.setState(
+            {
+              medicines: data.medicines
+            },
+            () => {
+              if (spinner) this.setSpinnerVisible(false);
+            }
+          );
         } else {
           console.log("No such document!");
         }
@@ -133,7 +144,7 @@ export default class MedsScreen extends React.Component {
       });
   };
 
-  deleteMed = (email, name, date, time, amount) => {
+  deleteMed = (email, name, date, time, amount, medInfo) => {
     db = firebase.firestore();
     let docRef = db.collection("usermeds").doc(email);
     docRef
@@ -142,81 +153,81 @@ export default class MedsScreen extends React.Component {
           name: name,
           date: date,
           time: time,
-          amount: amount
+          amount: amount,
+          medInfo: medInfo
         })
       })
-      .then(this.getMedFromFirestore(email));
+      .then(this.getMedFromFirestore(email, false));
   };
 
   componentWillMount() {
-    this.getMedFromFirestore(this.state.email);
+    this.getMedFromFirestore(this.state.email, true);
   }
 
-  getMedInfoFromAPI(email, name, date, time, amount) {
-    fetch(`${brandNameAPI}"${name}"`)
-      .then(response => response.json())
-      .then(respJson =>
-        this.addMedToFirestore(
-          email,
-          name,
-          date,
-          time,
-          amount,
-          respJson.results[0].indications_and_usage
-        )
-      )
-      .catch(
-        fetch(`${genericNameAPI}"${name}"`)
-          .then(response => response.json())
-          .then(respJson =>
-            this.addMedToFirestore(
-              email,
-              name,
-              date,
-              time,
-              amount,
-              respJson.results[0].indications_and_usage
-            )
-          )
-          .catch(
-            fetch(`${manufacturerNameAPI}"${name}"`)
-              .then(response => response.json())
-              .then(respJson =>
-                this.addMedToFirestore(
-                  email,
-                  name,
-                  date,
-                  time,
-                  amount,
-                  respJson.results[0].indications_and_usage
-                )
-              )
-              .catch(
-                fetch(`${manufacturerNameAPI}"${name}"`)
-                  .then(response => response.json())
-                  .then(respJson =>
-                    this.addMedToFirestore(
-                      email,
-                      name,
-                      date,
-                      time,
-                      amount,
-                      respJson.results[0].indications_and_usage
-                    )
-                  )
-                  .catch(() =>
-                    this.addMedToFirestore(
-                      email,
-                      name,
-                      date,
-                      time,
-                      amount,
-                      "There is no such med in the database"
-                    )
-                  )
-              )
-          )
+  async getMedInfoFromAPI(email, name, date, time, amount) {
+    let brandName, genericName, manufacturerName, substanceName, result;
+
+    brandName = await fetch(`${brandNameAPI}"${name}"`);
+
+    if (brandName.status !== 404) {
+      result = await brandName.json();
+      this.addMedToFirestore(
+        email,
+        name,
+        date,
+        time,
+        amount,
+        result.results[0].indications_and_usage
       );
+      return;
+    }
+
+    genericName = await fetch(`${genericName}"${name}"`);
+
+    if (genericName.status !== 404) {
+      result = await genericName.json();
+      this.addMedToFirestore(
+        email,
+        name,
+        date,
+        time,
+        amount,
+        result.results[0].indications_and_usage
+      );
+      return;
+    }
+
+    manufacturerName = await fetch(`${manufacturerNameAPI}"${name}"`);
+
+    if (manufacturerName.status !== 404) {
+      result = await manufacturerName.json();
+      this.addMedToFirestore(
+        email,
+        name,
+        date,
+        time,
+        amount,
+        result.results[0].indications_and_usage
+      );
+      return;
+    }
+
+    substanceName = await fetch(`${substanceName}"${name}"`);
+
+    if (substanceName.status !== 404) {
+      result = await substanceName.json();
+      this.addMedToFirestore(
+        email,
+        name,
+        date,
+        time,
+        amount,
+        result.results[0].indications_and_usage
+      );
+      return;
+    }
+
+    result = "There is no such med in the database";
   }
 
   render() {
@@ -240,16 +251,17 @@ export default class MedsScreen extends React.Component {
         </Body>
         <Right>
           <Icon
-            type="FontAwesome"
-            name="trash-o"
-            ios="trash-o"
+            type="AntDesign"
+            name="close"
+            ios="close"
             onPress={() => {
               this.deleteMed(
                 this.state.email,
                 this.state.medicines[index].name,
                 this.state.medicines[index].date,
                 this.state.medicines[index].time,
-                this.state.medicines[index].amount
+                this.state.medicines[index].amount,
+                this.state.medicines[index].medInfo
               );
             }}
           />
@@ -278,7 +290,11 @@ export default class MedsScreen extends React.Component {
             </Row>
             <Row style={{ height: "80%" }}>
               <Col>
-                <List>{MedicinesList}</List>
+                {this.state.spinnerVisible ? (
+                  <Spinner color="gray" />
+                ) : (
+                  <List>{MedicinesList}</List>
+                )}
               </Col>
             </Row>
           </Grid>
@@ -294,44 +310,60 @@ export default class MedsScreen extends React.Component {
             </Row>
             <Row style={styles.inputRow}>
               <Col>
-                <TextField
-                  label="Medicine name"
+                <Input
+                  placeholderTextColor="black"
+                  textColor="black"
+                  placeholder="Medicine name"
                   onChangeText={medName => this.setState({ medName })}
-                  baseColor="black"
-                  tintColor="black"
                 />
               </Col>
             </Row>
             <Row style={styles.inputRow}>
               <Col>
-                <TextField
-                  label="Pills amount"
+                <Input
+                  placeholderTextColor="black"
+                  textColor="black"
+                  placeholder="Pills amount"
                   onChangeText={amount => this.setState({ amount })}
-                  baseColor="black"
-                  tintColor="black"
                 />
               </Col>
             </Row>
-            <Row style={styles.inputRow}>
+            <Row style={styles.dateRow}>
               <Col>
-                <Dropdown
-                  label="Day of week"
-                  data={this.state.daysOfWeek}
-                  onChangeText={dayOfWeek => this.setState({ date: dayOfWeek })}
-                  baseColor="black"
-                  textColor="black"
-                />
+                <Picker
+                  mode="dropdown"
+                  onValueChange={dayOfWeek =>
+                    this.setState({ date: dayOfWeek })
+                  }
+                  selectedValue={this.state.date}
+                  placeholder="Day of week"
+                >
+                  {this.state.daysOfWeek.map((item, index) => (
+                    <Picker.Item
+                      key={index}
+                      label={item.value}
+                      value={item.value}
+                    />
+                  ))}
+                </Picker>
               </Col>
             </Row>
-            <Row style={styles.inputRow}>
+            <Row style={styles.dateRow}>
               <Col>
-                <Dropdown
-                  label="Time"
-                  data={this.state.hoursOfDay}
-                  onChangeText={time => this.setState({ time })}
-                  baseColor="black"
-                  textColor="black"
-                />
+                <Picker
+                  mode="dropdown"
+                  onValueChange={time => this.setState({ time: time })}
+                  selectedValue={this.state.time}
+                  placeholder="Time"
+                >
+                  {this.state.hoursOfDay.map((item, index) => (
+                    <Picker.Item
+                      key={index}
+                      label={item.value}
+                      value={item.value}
+                    />
+                  ))}
+                </Picker>
               </Col>
             </Row>
             <Row style={styles.inputRow}>
@@ -390,8 +422,8 @@ const styles = StyleSheet.create({
     marginRight: "auto"
   },
   dateRow: {
-    height: "15%",
-    width: "75%",
+    height: "10%",
+    width: "80%",
     marginLeft: "auto",
     marginRight: "auto"
   }
