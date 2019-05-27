@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 import { Container, Header, Content, Button, Text, Left } from 'native-base';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCapsules, faCogs, faGlobeAmericas, faAmbulance } from '@fortawesome/free-solid-svg-icons'
 import { Col, Row, Grid } from "react-native-easy-grid";
 import logo from '../assets/images/logo.png';

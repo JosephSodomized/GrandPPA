@@ -1,15 +1,20 @@
 import React from "react";
 import {
+  ScrollView,
   StyleSheet,
   Text,
   View,
+  FlatList,
   Modal,
+  TouchableHighlight
 } from "react-native";
+import { ExpoLinksView } from "@expo/samples";
 import firebase from "firebase";
 import "@firebase/firestore";
 import {
   Button,
   ListItem,
+  Content,
   List,
   Container,
   Left,
@@ -19,15 +24,22 @@ import {
   Row,
   Col,
   Icon,
+  Form,
   Input,
+  Label,
+  Item,
   Picker,
   Spinner
 } from "native-base";
+import { LinearGradient } from "expo";
+import { Dropdown } from "react-native-material-dropdown";
 
 import hoursOfDay from "../constants/hoursOfDay";
 import daysOfWeek from "../constants/daysOfWeek";
 
+import { TextField } from "react-native-material-textfield";
 
+import firebaseConfig from "../firebaseConfig";
 
 let db;
 const brandNameAPI =
@@ -171,7 +183,7 @@ export default class MedsScreen extends React.Component {
       return;
     }
 
-    genericName = await fetch(`${genericNameAPI}"${name}"`);
+    genericName = await fetch(`${genericName}"${name}"`);
 
     if (genericName.status !== 404) {
       result = await genericName.json();
@@ -201,7 +213,7 @@ export default class MedsScreen extends React.Component {
       return;
     }
 
-    substanceName = await fetch(`${substanceNameAPI}"${name}"`);
+    substanceName = await fetch(`${substanceName}"${name}"`);
 
     if (substanceName.status !== 404) {
       result = await substanceName.json();
@@ -217,8 +229,6 @@ export default class MedsScreen extends React.Component {
     }
 
     result = "There is no such med in the database";
-    this.addMedToFirestore(email, name, date, time, amount, result);
-    return;
   }
 
   render() {
