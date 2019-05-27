@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, TextInput} from 'react-native';
-import { Container, Header, Content, Button, Text, Left } from 'native-base';
+import { StyleSheet, View, Image, TextInput, Alert} from 'react-native';
+import { Container, Header, Content, Button, Text, Left, List, Body, Right, Icon } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
 import * as firebase from "firebase/app";
+import { ListItem, withTheme } from 'react-native-elements';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faUserMinus} from '@fortawesome/free-solid-svg-icons';
 
 
 class ChangeUsername extends Component {
@@ -10,7 +13,7 @@ class ChangeUsername extends Component {
         headerTitle: <Image source={require('../assets/images/logo.png')} style={{width:100, height:20}}/>,
         headerStyle: {
         backgroundColor: 'rgba(64,64,64,1)',
-    },
+    }, 
     headerTintColor: '#fff',
     };
 
@@ -39,6 +42,7 @@ class ChangeUsername extends Component {
               );
 
               console.log(this.state.numbers);
+              console.log(this.state.numbers.name);
             } else {
               console.log("No such document!");
             }
@@ -48,14 +52,60 @@ class ChangeUsername extends Component {
           });
       };
 
+      
+      removeContact = (email, name, number) => {
+          console.log('in a method');
+          console.log(email);
+          console.log(name);
+          console.log(number);
+
+        db = firebase.firestore();
+        let docRef = db.collection("usercontacts").doc(email);
+        docRef
+          .update({
+            numbers: firebase.firestore.FieldValue.arrayRemove({
+              name: name,
+              number: number,
+            })
+          })
+          .then(this.getContactFromFirestore(email));
+
+      };
+
+      componentWillMount() {
+          this.getContactFromFirestore(this.state.email);
+      }
+
+      removingContactHandler = (email, name, number) => {
+          console.log('in a handler');
+        Alert.alert('Are you sure?', 'Your contact will be removed and you no longer will be able to call it in case of emergency',
+        [
+            {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+            {text: 'Delete', onPress: () => this.removeContact(email, name, number)}
+        ]);
+      } 
+
     render () {
+
+        const Contacts = this.state.numbers.map((item, index) => (
+            <Button style={styles.button} key={index} onPress={() => this.removingContactHandler(this.state.email, item.name, item.number)}>
+                < Text style={styles.buttonText}>
+                  {item.name} : {item.number}
+                </Text>
+                  <Icon
+                   name='ios-trash'
+                   color='black'
+                   >
+                  </Icon>
+            </Button>
+          ));
+
         return(
             <ScrollView>
                 <View style={styles.container}> 
                     <Container style={styles.back}>
-                                    <Button onPress={() => this.getContactFromFirestore(this.state.email)}>
-                                        <Text>Click</Text>
-                                    </Button>
+                        
+                                    <List>{Contacts}</List>
                     </Container>
                 </View>
             </ScrollView>
@@ -67,29 +117,30 @@ class ChangeUsername extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 150,
-        backgroundColor: 'rgba(237,199,7,1)',
+        backgroundColor: 'rgba(64,64,64,1)',
         
     },
     back: {
         backgroundColor: 'rgba(64,64,64,1)',
-        justifyContent: 'space-evenly',
-        alignItems: 'stretch',
-        padding: 30,
+        padding: 10
     },
     logo: {
         fontSize: 20,
         alignSelf: 'center',
         padding: 50
     },
-    textInput: {
-        borderColor: '#CCCCCC',
-        borderTopWidth: 1,
-        borderBottomWidth: 1,
-        height: 50,
-        fontSize: 25,
-        paddingLeft: 20,
-        paddingRight: 20
-      }
+    button: {
+        width: 350,
+        height: 45,
+        backgroundColor: '#595959',
+        
+
+    },
+    buttonText: {
+        color: 'white',
+        
+    }
+    
     
 });
 

@@ -55,7 +55,7 @@ class AddContact extends Component {
 
     
 
-             addContact(email, number, name) {
+             addContact(email, name, number) {
                 db = firebase.firestore();
                 let usercontacts = db.collection("usercontacts");
                 const usersRef = usercontacts.doc(email);
@@ -69,8 +69,8 @@ class AddContact extends Component {
                     usersRef.onSnapshot(doc => {
                       usersRef.update({
                         numbers: firebase.firestore.FieldValue.arrayUnion({
-                          number: number,
-                          name: name,
+                            name: name,                         
+                            number: number,
                         })
                       });
                     });
@@ -91,21 +91,7 @@ class AddContact extends Component {
                   }
                 });
             }
-
-            deleteContact = (email, name, number) => {
-                db = firebase.firestore();
-                let docRef = db.collection("usercontacts").doc(email);
-                docRef
-                  .update({
-                    numbers: firebase.firestore.FieldValue.arrayRemove({
-                      name: name,
-                      number: number,
-                    })
-                  })
-              };
-
-
-      
+     
 
     render () {
 
