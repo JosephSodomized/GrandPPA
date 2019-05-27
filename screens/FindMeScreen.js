@@ -5,6 +5,9 @@ import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faSms} from '@fortawesome/free-solid-svg-icons';
 import { SMS } from 'expo';
+import * as firebase from "firebase/app";
+
+
 
 
 export default class FindMeScreen extends Component {
@@ -16,19 +19,26 @@ export default class FindMeScreen extends Component {
     headerTintColor: '#fff',
   };
 
-  state = {
-    region: {
-      latitude: 0,
-      longitude: 0,
-      latitudeDelta: 0.015,
-      longitudeDelta: 0.0121,
-    },
-    marker: {
-      latitude: 0,
-      longitude: 0,
-
-    },
-    watchID: null
+  constructor(props) {
+    super(props);
+    this.state = {
+        name: null, 
+        number: null,
+        email: props.navigation.state.params.email,
+        numbers: [],
+        region: {
+            latitude: 0,
+            longitude: 0,
+            latitudeDelta: 0.015,
+            longitudeDelta: 0.0121,
+          },
+          marker: {
+            latitude: 0,
+            longitude: 0,
+      
+          },
+          watchID: null
+    };
   }
 
   componentWillMount() {
@@ -86,13 +96,38 @@ export default class FindMeScreen extends Component {
 
   sendSms = async () =>{
     const status = await SMS.sendSMSAsync(
-      '515818473', 
+      '515818473',
       'Zgubiłem się, moje położenie to:'+`\n`+
       'https://maps.google.com/?q='+`${JSON.stringify(this.state.region.latitude)}`+','+`${JSON.stringify(this.state.region.longitude)}`
     );
 
     console.log(status);
   }
+
+  getContactFromFirestore = (email) => {
+    db = firebase.firestore();
+    let docRef = db.collection("usercontacts").doc(email);
+    docRef
+      .get()
+      .then(doc => {
+        if (doc.exists) {
+          let data = doc.data();
+          this.setState(
+            {
+              numbers: data.numbers
+            },
+          );
+
+          console.log(this.state.numbers);
+          console.log(this.state.numbers.name);
+        } else {
+          console.log("No such document!");
+        }
+      })
+      .catch(function(err) {
+        console.log("Error getting document:", err);
+      });
+  };
 
   render() {
     if (this.state.loaded !== null) {
@@ -105,7 +140,7 @@ export default class FindMeScreen extends Component {
               <MapView.Marker coordinate={this.state.marker}/>
             </MapView>
             <View style={styles.buttonContainer}>
-            <Button onPress={this.sendSms}  dark rounded>
+            <Button onPress={this.sendSms()}  dark rounded>
             <Text>Send location</Text>
             <FontAwesomeIcon style={styles.faSms} icon={faSms} size={40} color="#fff" />
               </Button>
