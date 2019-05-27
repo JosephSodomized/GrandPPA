@@ -16,13 +16,19 @@ class AddContact extends Component {
     headerTintColor: '#fff',
     };
 
-    state = {
-        name: null, 
-        number: null,
-        isValid: null,
-        isSubmited: false,
-        email: 'karo.rutkowska@gmail.com',
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            name: null, 
+            number: null,
+            isValid: null,
+            isSubmited: false,
+            email: props.navigation.state.params.email,
+            numbers: [],
+        };
       }
+
 
       
       
