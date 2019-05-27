@@ -5,6 +5,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import Input from '../components/Input';
 import firebaseConfig from '../firebaseConfig';
+import * as firebase from "firebase/app";
 
 class AddContact extends Component {
     static navigationOptions = {
@@ -20,6 +21,7 @@ class AddContact extends Component {
         number: null,
         isValid: null,
         isSubmited: false,
+        email: 'karo.rutkowska@gmail.com',
       }
 
       
@@ -41,61 +43,97 @@ class AddContact extends Component {
         } else {
                 //valid HERE WILL BE THE ADDCONTACT FUNC
                 console.log('im a consol log before function call');
-                this.addContact(name, number);
+                this.addContact(this.state.email,name, number);
         }
       }
 
-      addContact = (name, mobile) => {
-          /* To add contact there must be:
-            -   a login token that connects user with his contact,
-            -   a post request that sends data to the server,
-            -   a control get to see what's in there
-            -   an alert saying about success or error */
+    //   addContact = (name, mobile) => {
+    //       /* To add contact there must be:
+    //         -   a login token that connects user with his contact,
+    //         -   a post request that sends data to the server,
+    //         -   a control get to see what's in there
+    //         -   an alert saying about success or error */
 
-            if(name!=null && mobile!=null){
+    //         // if(name!=null && mobile!=null){
 
-                console.log('Adding contact process started');
-                fetch(firebaseConfig.databaseURL + '/contacts/contacts_list.json', {
-                method:'POST',
-                headers: {
-                Accept:'application/json',
-                'Content-Type':'application/json',
-               },
-                body:JSON.stringify({
-                 "name":name,
-                 "mobile":mobile,
-                 }),
-                })
-                .catch((error) => console.log(error))
-                .then((response) => console.log(response))
-               .then((responseData) => {
-                 if(responseData.name !=null ){
-                 this.setState({
-                 name:null,
-                 mobile:null,
-                 isSubmited:true,
-                })
+    //         //     console.log('Adding contact process started');
+    //         //     fetch(firebaseConfig.databaseURL + '/contacts/contacts_list.json', {
+    //         //     method:'POST',
+    //         //     headers: {
+    //         //     Accept:'application/json',
+    //         //     'Content-Type':'application/json',
+    //         //    },
+    //         //     body:JSON.stringify({
+    //         //      "name":name,
+    //         //      "mobile":mobile,
+    //         //      }),
+    //         //     })
+    //         //     .catch((error) => console.log(error))
+    //         //     .then((response) => console.log(response))
+    //         //    .then((responseData) => {
+    //         //      if(responseData.name !=null ){
+    //         //      this.setState({
+    //         //      name:null,
+    //         //      mobile:null,
+    //         //      isSubmited:true,
+    //         //     })
                 
-                console.log("post method executed");
-              }
-             else{
-               Alert.alert(
-                'Oops !',
-                'Something went wrong',[
-                 {text: 'OK', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},],
-                { cancelable: false })
-              }
-             })
-             .done();
-             }
-             else{
-               Alert.alert(
-                'Oops !',
-                'Press SUBMIT button after entering your message',[
-                {text: 'OK', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},],
-                { cancelable: false })
-                }
-             };
+    //         //     console.log("post method executed");
+    //         //   }
+    //         //  else{
+    //         //    Alert.alert(
+    //         //     'Oops !',
+    //         //     'Something went wrong',[
+    //         //      {text: 'OK', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},],
+    //         //     { cancelable: false })
+    //         //   }
+    //         //  })
+    //         //  .done();
+    //         //  }
+    //         //  else{
+    //         //    Alert.alert(
+    //         //     'Oops !',
+    //         //     'Press SUBMIT button after entering your message',[
+    //         //     {text: 'OK', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},],
+    //         //     { cancelable: false })
+    //         //     }
+
+    //          };
+
+             addContact(email, number, name) {
+                db = firebase.firestore();
+                let usercontacts = db.collection("usercontacts");
+                const usersRef = usercontacts.doc(email);
+
+                console.log('add contact fun started get started');
+
+             
+                usersRef.get().then(docSnapshot => {
+                    console.log('userRef get started');
+                  if (docSnapshot.exists) {
+                    usersRef.onSnapshot(doc => {
+                      usersRef.update({
+                        numbers: firebase.firestore.FieldValue.arrayUnion({
+                          number: number,
+                          name: name,
+                        })
+                      });
+                    });
+                    console.log('if got through');
+                  } else {
+                    usersRef.set({ numbers: [] });
+                    usersRef.onSnapshot(doc => {
+                      usersRef.update({
+                        numbers: firebase.firestore.FieldValue.arrayUnion({
+                          number: number,
+                          name: name,
+                        })
+                      });
+                    });
+                    console.log('else got throough');
+                  }
+                });
+            }
 
       
 
