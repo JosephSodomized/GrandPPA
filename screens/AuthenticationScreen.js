@@ -1,17 +1,18 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, TouchableHighlight, Image } from "react-native";
 
 import { Google } from "expo";
 import { Button } from "native-base";
 import { LinearGradient } from "expo";
 
-import { Container, Input, Item, Icon } from "native-base";
+import { Container, Input, Item, Icon, Header } from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
 
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import clientid from "../clientid";
+import logo from '../assets/images/logo.png';
 
 export default class AuthenticationScreen extends React.Component {
   static navigationOptions = {
@@ -68,13 +69,14 @@ export default class AuthenticationScreen extends React.Component {
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
-        <Container>
-          <LinearGradient
-            colors={["#8000ff", "#5a0979", "#1d004d"]}
-            style={{ flex: 1 }}
-          >
+      <Container style={styles.back}>
+      <TouchableHighlight onPress={this.onPressLogo} underlayColor="white">
+      <Header style={styles.header}>
+        <Image  source={logo} style={{width: 305, height: 65, marginTop:10}}/>
+        </Header>
+      </TouchableHighlight>
             <Grid>
-              <Row style={{ height: "25%" }}>
+              <Row style={{ height: "5%" }}>
                 <Col />
               </Row>
               <Row style={styles.inputRow}>
@@ -194,7 +196,6 @@ export default class AuthenticationScreen extends React.Component {
                 <Col />
               </Row>
             </Grid>
-          </LinearGradient>
         </Container>
       </View>
     );
@@ -202,9 +203,22 @@ export default class AuthenticationScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  backgroundGradient: {},
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: 'rgba(237,199,7,1)',
+  },
+  header:{
+    backgroundColor: 'rgba(64,64,64,1)',
+    height: 90,
+    padding: 20
+  },
+  back: {
+    backgroundColor: 'rgba(64,64,64,1)'
+  },
+  logo: {
+    fontSize: 20,
+    alignSelf: 'center',
+    padding: 50
   },
   orOption: {
     textAlign: "center",

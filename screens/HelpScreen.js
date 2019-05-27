@@ -15,8 +15,13 @@ import { faCapsules, faCogs, faGlobeAmericas, faAmbulance } from '@fortawesome/f
 
 export default class HelpScreen extends React.Component {
   static navigationOptions = {
-    title: 'Help',
+    headerTitle: <Image source={require('../assets/images/logo.png')} style={{ width: 100, height: 20 }} />,
+    headerStyle: {
+      backgroundColor: 'rgba(64,64,64,1)',
+    },
+    headerTintColor: '#fff',
   };
+
 
   constructor(props) {
     super();
@@ -36,12 +41,6 @@ export default class HelpScreen extends React.Component {
     return (
       <View style={styles.container}>
         <Container style={styles.back}>
-        <TouchableHighlight onPress={this.onPressLogo} underlayColor="white">
-        <Header style={styles.header}>
-          <Image  source={require('../assets/images/logo.png')} style={{width: 305, height: 65, marginTop:10}}/>
-          </Header>
-        </TouchableHighlight>
-          
           <Content>
             <Grid style={styles.align}>
               <Row>
@@ -52,6 +51,27 @@ export default class HelpScreen extends React.Component {
                       <Text style={styles.TextStyle}>{this.state.text}</Text>
                     </Button>
                 </Col>
+              </Row>
+              <Row>
+                <Col><Text style={styles.TextStyle2}>1. Stay calm</Text></Col>
+              </Row>
+              <Row>
+                <Col><Text>&nbsp;</Text></Col>
+              </Row>
+              <Row>
+                <Col><Text style={styles.TextStyle2}>2. Wait until the operator answers your call</Text></Col>
+              </Row>
+              <Row>
+                <Col><Text>&nbsp;</Text></Col>
+              </Row>
+              <Row>
+                <Col><Text style={styles.TextStyle2}>3. Follow the operator’s advice</Text></Col>
+              </Row>
+              <Row>
+                <Col><Text>&nbsp;</Text></Col>
+              </Row>
+              <Row>
+                <Col><Text style={styles.TextStyle2}>4. If something changes, inform 112 again</Text></Col>
               </Row>
             </Grid>
           </Content>
@@ -82,23 +102,22 @@ const styles = StyleSheet.create({
   TextStyle:{
     display: 'flex',
     top: 60,
-    fontSize: 30,
-    right: 42,
-    color:'#fff'
+    fontSize: 25,
+    color:'#fff',
+    right: 40
   },
   TextStyle2:{
     display: 'flex',
     top: 60,
-    fontSize: 30,
-    right: 42,
-    color:'rgba(57,57,57,1)'
+    fontSize: 25,
+    color:'#fff',
   },
   align: {
     margin: 10
   },
   faCapsules:{
     display: 'flex',
-    left: 70,
+    left: 110,
     top: -10
   },
   button: {

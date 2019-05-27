@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View, Modal } from "react-native";
+import { StyleSheet, Text, View, Modal, Image } from "react-native";
 import firebase from "firebase";
 import "@firebase/firestore";
 import {
@@ -33,7 +33,11 @@ const substanceNameAPI =
   "https://api.fda.gov/drug/label.json?search=openfda.substance_name:";
 export default class MedsScreen extends React.Component {
   static navigationOptions = {
-    title: "Medicine"
+    headerTitle: <Image source={require('../assets/images/logo.png')} style={{ width: 100, height: 20 }} />,
+    headerStyle: {
+      backgroundColor: 'rgba(64,64,64,1)',
+    },
+    headerTintColor: '#fff',
   };
 
   constructor(props) {
@@ -255,7 +259,7 @@ export default class MedsScreen extends React.Component {
 
     return (
       <View style={{ flex: 1 }}>
-        <Container>
+        <Container style={{ flex: 1,  backgroundColor: 'rgba(64,64,64,1)' }}>
           <Grid>
             <Row style={{ height: "5%" }}>
               <Col />
@@ -411,5 +415,6 @@ const styles = StyleSheet.create({
     width: "80%",
     marginLeft: "auto",
     marginRight: "auto"
-  }
+  },
+
 });
