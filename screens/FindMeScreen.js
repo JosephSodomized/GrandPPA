@@ -1,48 +1,145 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableHighlight, Image } from 'react-native';
-import { Container, Header, Content, Button, Text, Left } from 'native-base';
+import { StyleSheet, View, TouchableHighlight, Image, TouchableOpacity } from 'react-native';
+import { Container, Header, Content, Button, Text, Left, Alert } from 'native-base';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faSms} from '@fortawesome/free-solid-svg-icons';
+import { SMS } from 'expo';
 
 
 export default class FindMeScreen extends Component {
-    static navigationOptions = {
-        headerTitle: <Image source={require('../assets/images/logo.png')} style={{width:100, height:20}}/>,
-        headerStyle: {
-        backgroundColor: 'rgba(64,64,64,1)',
+  static navigationOptions = {
+    headerTitle: <Image source={require('../assets/images/logo.png')} style={{ width: 100, height: 20 }} />,
+    headerStyle: {
+      backgroundColor: 'rgba(64,64,64,1)',
     },
     headerTintColor: '#fff',
-    };
+  };
 
-    render() {
-        return (
-            <View style={styles.container}>
-                <Container style={styles.back}>
-                    <Text style={styles.white}>Dalej coś będzie działane później</Text>
-                </Container>
-            </View>
-        )
+  state = {
+    region: {
+      latitude: 0,
+      longitude: 0,
+      latitudeDelta: 0.015,
+      longitudeDelta: 0.0121,
+    },
+    marker: {
+      latitude: 0,
+      longitude: 0,
+
+    },
+    watchID: null
+  }
+
+  componentWillMount() {
+    this.getCurrentPosition();
+  }
+
+  componentWillUnmount() {
+    this.checkPosition();
+  }
+
+  getCurrentPosition = () => {
+    navigator.geolocation.getCurrentPosition(position => {
+      var lat = parseFloat(position.coords.latitude);
+      var long = parseFloat(position.coords.longitude);
+      this.setState({
+        latitude: lat,
+        longitude: long,
+        latitudeDelta: 0.015,
+        longitudeDelta: 0.0121,
+      });
+    },
+      error => Alert.alert(error.message),
+      { enableHighAccuracy: true, timeout: 2000, maximumAge: 100 }
+    );
+
+    this.state.watchID = navigator.geolocation.watchPosition((position) => {
+      var lat = parseFloat(position.coords.latitude);
+      var long = parseFloat(position.coords.longitude);
+
+      var lastRegion = {
+        latitude: lat,
+        longitude: long,
+        latitudeDelta: 0.015,
+        longitudeDelta: 0.0121,
+      }
+
+      this.setState({ region: lastRegion })
+      this.setState({ marker: lastRegion })
+    })
+  }
+
+  checkPosition = () => {
+    if (this.state.region.latitude !== null || this.state.region.longitude !== null) {
+      this.setState(this.state.loaded = true)
     }
+  }
+
+  componentWillUnmount() {
+    navigator.geolocation.clearWatch(this.watchID)
+  }
+
+  loading() {
+    return (<View><Text>Loading...</Text></View>)
+  }
+
+  sendSms = async () =>{
+    const status = await SMS.sendSMSAsync(
+      '515818473', 
+      'Zgubiłem się, moje położenie to:'+`\n`+
+      'https://maps.google.com/?q='+`${JSON.stringify(this.state.region.latitude)}`+','+`${JSON.stringify(this.state.region.longitude)}`
+    );
+
+    console.log(status);
+  }
+
+  render() {
+    if (this.state.loaded !== null) {
+      return (
+        <View style={styles.container}>
+            <MapView
+              provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+              style={styles.map}
+              region={this.state.region}>
+              <MapView.Marker coordinate={this.state.marker} />
+            </MapView>
+            <View style={styles.buttonContainer}>
+            <Button onPress={this.sendSms}  dark rounded>
+            <Text>Send location</Text>
+            <FontAwesomeIcon style={styles.faSms} icon={faSms} size={40} color="#fff" />
+              </Button>
+          </View>
+            <Text>Latitude: {this.state.region.latitude}</Text>
+            <Text>Longitude: {this.state.region.longitude}</Text>          
+        </View>
+      )
+    }
+    return this.loading()
+  }
 }
 
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: 'rgba(237,199,7,1)',
-    },
-    header: {
-        backgroundColor: 'rgba(64,64,64,1)',
-        height: 90,
-        padding: 20
-    },
-    back: {
-        backgroundColor: 'rgba(64,64,64,1)'
-    },
-    logo: {
-        fontSize: 20,
-        alignSelf: 'center',
-        padding: 50
-    },
-    white:{
-        color: '#fff'
-    }
+  container: {
+    ...StyleSheet.absoluteFillObject,
+    height: 'auto',
+    width: 'auto',
+    justifyContent: 'flex-end',
+    alignItems: 'center'
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  buttonContainer: {
+    marginBottom: 100,
+    paddingTop: 10,
+    paddingBottom: 10
+  },
+  faSms: {
+    marginRight: 10
+  }
 });
+
+
+

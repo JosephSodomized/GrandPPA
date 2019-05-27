@@ -25,9 +25,11 @@
     "react-native-elements": "^1.1.0",
     "react-native-fontawesome": "^6.0.1",
     "react-native-form-builder": "^1.0.16",
+    "react-native-maps": "*",
     "react-native-material-dropdown": "^0.11.1",
     "react-native-material-textfield": "^0.12.0",
     "react-native-modal-datetime-picker": "^7.4.2",
+
     "react-native-radial-gradient": "^1.0.5",
     "react-navigation": "^3.0.9"
   },
