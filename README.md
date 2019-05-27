@@ -1,14 +1,32 @@
-## GrandppA
+# GrandPPA
 
-Project for PSM classes
+## GrandPPA to aplikacja mobilna skierowana dla starszych użytkowników smartfonów. Jej główne przeznaczenie to tworzenie listy leków wraz z datami i godzinami przyjmowania. Ponadto aplikacja oferuje:
+* autoryzacje użytkowników za pomocą adresu e-mail, hasła oraz portalu Google,
+* dodawanie leków z opisem wykorzystania i wskazówkami pobieranymi z API,
+* wykonanie szybkiego telefonu pod numer 112,
+* wysyłanie swojej lokalizacji smsem pod zapisane numery telefonów.
 
-In the project directory, you can run:
+## Skład zespołu projektowego:
+* Michał Bałos,
+* Dominik Malcharczyk,
+* Karolina Rutkowska,
+* Michał Topolski.
 
-npm start
+### Celem aplikacji jest wsparcie osób starszych. Dzisiejsze smartfony przytłaczają funkcjonalnościami. GrandPPA zbiera wszystkie ważne funkcjonalności w jednym miejscu. Już nigdy nie zapomnisz o lekach, a kiedy będziesz potrzebował wsparcia ratunkowego lub wsparcia od swoich znajomych lub rodziny, zrobisz to jednym przyciskiem.
 
-Runs the app in the development mode.
-Open http://localhost:3000 to view it in the browser.
+## Funkcjonalności
 
-The page will reload if you make edits.
-You will also see any lint errors in the console.
-*** Make sure to install expo as well (with npm install expo-cli) ***
+### Lista leków
+
+### Znajdź mnie
+  
+### Pomóż mi
+
+### Ustawienia
+
+  
+## Składowe projektu:
+* [Prototyp](http://www.google.com)
+* [Aplikacja](http://www.google.com)
+* [Trello](https://trello.com/b/RP8mRNb0)
+* [Repozytorium](http://www.github.com/JosephSodomized/GrandPPA)
