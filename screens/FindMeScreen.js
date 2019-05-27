@@ -86,7 +86,7 @@ export default class FindMeScreen extends Component {
 
   sendSms = async () =>{
     const status = await SMS.sendSMSAsync(
-      '515818473', 
+      ['515818473', '‭531574645‬'], 
       'Zgubiłem się, moje położenie to:'+`\n`+
       'https://maps.google.com/?q='+`${JSON.stringify(this.state.region.latitude)}`+','+`${JSON.stringify(this.state.region.longitude)}`
     );
