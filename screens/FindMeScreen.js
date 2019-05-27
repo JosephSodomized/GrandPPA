@@ -102,7 +102,7 @@ export default class FindMeScreen extends Component {
               provider={PROVIDER_GOOGLE} // remove if not using Google Maps
               style={styles.map}
               region={this.state.region}>
-              <MapView.Marker coordinate={this.state.marker} />
+              <MapView.Marker coordinate={this.state.marker}/>
             </MapView>
             <View style={styles.buttonContainer}>
             <Button onPress={this.sendSms}  dark rounded>
@@ -110,8 +110,6 @@ export default class FindMeScreen extends Component {
             <FontAwesomeIcon style={styles.faSms} icon={faSms} size={40} color="#fff" />
               </Button>
           </View>
-            <Text>Latitude: {this.state.region.latitude}</Text>
-            <Text>Longitude: {this.state.region.longitude}</Text>          
         </View>
       )
     }
