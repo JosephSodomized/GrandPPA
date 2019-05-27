@@ -70,7 +70,8 @@ export default class HomeScreen extends React.Component {
               <Row>
                 <Col>
                   <Button style={styles.button3} block
-                  onPress={() => navigate('FindMe')}>
+                  onPress={() => {navigate('FindMe', {email: this.state.email});
+                  console.log(this.state.email)}}>
                   <FontAwesomeIcon style={styles.faCapsules} icon={faGlobeAmericas} size={90} color="#fff" />
                   <Text style={styles.TextStyle}>Find me</Text>
                   </Button>
