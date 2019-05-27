@@ -22,7 +22,13 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-easy-grid": "^0.2.1",
     "react-native-fontawesome": "^6.0.1",
+<<<<<<< HEAD
     "react-native-maps": "*",
+=======
+    "react-native-material-dropdown": "^0.11.1",
+    "react-native-material-textfield": "^0.12.0",
+    "react-native-modal-datetime-picker": "^7.4.2",
+>>>>>>> master
     "react-native-radial-gradient": "^1.0.5",
     "react-navigation": "^3.0.9"
   },
