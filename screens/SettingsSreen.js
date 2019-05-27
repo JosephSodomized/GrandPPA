@@ -7,6 +7,15 @@ import { faAddressBook, faUserCog} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 
 class SettingsScreen extends Component {
+
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            email: props.navigation.state.params.email,
+        };
+      }
+
     static navigationOptions = {
         headerTitle: <Image source={require('../assets/images/logo.png')} style={{width:100, height:20}}/>,
         headerStyle: {
@@ -23,7 +32,8 @@ class SettingsScreen extends Component {
                 <Container style={styles.back}>
                         <Row >
                                 <Button style={styles.button2} block 
-                                onPress={() => navigate('AddContact')} >
+                                onPress={() => {navigate('AddContact', {email: this.state.email});
+                                console.log(this.state.email)}} >
                                 <FontAwesomeIcon icon={faAddressBook} size={80} color="#fff" />
                                 <Text></Text>
                                 <Text style={styles.text}>Add contact</Text>
