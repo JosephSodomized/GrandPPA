@@ -12,9 +12,18 @@ import { Container, Header, Content, Button, Text, Left } from 'native-base';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faCapsules, faCogs, faGlobeAmericas, faAmbulance } from '@fortawesome/free-solid-svg-icons'
 import { Col, Row, Grid } from "react-native-easy-grid";
+import logo from '../assets/images/logo.png';
 
 
 export default class HomeScreen extends React.Component {
+  
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: props.navigation.state.params.email,
+    }
+  }
+
   static navigationOptions = {
     header: null,
   };
@@ -23,15 +32,20 @@ export default class HomeScreen extends React.Component {
     Alert.alert('GrandppA: Projekt wykonany przez:'+`\n`+ `\n`+ ' Karolina Rutkowska'+`\n`+ 'Michał Bałos'+`\n`+ 'Michał Topolski'+`\n`+ 'Dominik Malcharczyk');
   }
 
+  componentWillMount(){
+    console.log(this.state.email);
+  }
+
   render() {
     const DURATION = 50000;
     const {navigate} = this.props.navigation;
+    const {email} = this.state.email;
     return (
       <View style={styles.container}>
         <Container style={styles.back}>
         <TouchableHighlight onPress={this.onPressLogo} underlayColor="white">
         <Header style={styles.header}>
-          <Image  source={require('../assets/images/logo.png')} style={{width: 305, height: 65, marginTop:10}}/>
+          <Image  source={logo} style={{width: 305, height: 65, marginTop:10}}/>
           </Header>
         </TouchableHighlight>
           
@@ -40,7 +54,8 @@ export default class HomeScreen extends React.Component {
               <Row>
                 <Col>
                     <Button style={styles.button} block warning 
-                    onPress={() => navigate('Meds')}>
+                    onPress={() => {navigate('Meds', {email: this.state.email});
+                    console.log(this.state.email)}}>
                       <FontAwesomeIcon style={styles.faCapsules} icon={faCapsules} size={90} color="#fff" />
                       <Text style={styles.TextStyle}>Medicine</Text>
                     </Button>
