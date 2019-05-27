@@ -140,7 +140,7 @@ export default class FindMeScreen extends Component {
               <MapView.Marker coordinate={this.state.marker}/>
             </MapView>
             <View style={styles.buttonContainer}>
-            <Button onPress={this.sendSms()}  dark rounded>
+            <Button onPress={this.sendSms}  dark rounded>
             <Text>Send location</Text>
             <FontAwesomeIcon style={styles.faSms} icon={faSms} size={40} color="#fff" />
               </Button>
