@@ -101,13 +101,12 @@ export default class FindMeScreen extends Component {
 
   sendSms = async () =>{
 
-        contactsList = this.setContactsArray();
-        console.log('contactsList state');
-        console.log(contactsList);
-   // this.getContactFromFirestore(this.state.email);
+      const  contactsList = this.state.numbers.map((item) => {
+            return item.number;
+    });
 
     const status = await SMS.sendSMSAsync(
-      `${JSON.stringify(this.state.numbers.number)}`,
+      contactsList,
       'Zgubiłem się, moje położenie to:'+`\n`+
       'https://maps.google.com/?q='+`${JSON.stringify(this.state.region.latitude)}`+','+`${JSON.stringify(this.state.region.longitude)}`
     );
@@ -139,11 +138,7 @@ export default class FindMeScreen extends Component {
       });
   };
 
-    setContactsArray = () => {
-        this.state.numbers.map((index, item) => {
-            contactsList[index] = item.number})
-        return contactsList
-    }
+    
 
   render() {
     if (this.state.loaded !== null) {
