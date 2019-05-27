@@ -25,7 +25,8 @@ export default class FindMeScreen extends Component {
         name: null, 
         number: null,
         email: props.navigation.state.params.email,
-        numbers: [],
+        numbers: null,
+        contacts: [],
         region: {
             latitude: 0,
             longitude: 0,
@@ -94,9 +95,19 @@ export default class FindMeScreen extends Component {
     return (<View><Text>Loading...</Text></View>)
   }
 
+  componentDidMount() {
+      this.getContactFromFirestore(this.state.email);
+  }
+
   sendSms = async () =>{
+
+        contactsList = this.setContactsArray();
+        console.log('contactsList state');
+        console.log(contactsList);
+   // this.getContactFromFirestore(this.state.email);
+
     const status = await SMS.sendSMSAsync(
-      '515818473',
+      `${JSON.stringify(this.state.numbers.number)}`,
       'Zgubiłem się, moje położenie to:'+`\n`+
       'https://maps.google.com/?q='+`${JSON.stringify(this.state.region.latitude)}`+','+`${JSON.stringify(this.state.region.longitude)}`
     );
@@ -117,9 +128,8 @@ export default class FindMeScreen extends Component {
               numbers: data.numbers
             },
           );
-
+          console.log('numbers array');
           console.log(this.state.numbers);
-          console.log(this.state.numbers.name);
         } else {
           console.log("No such document!");
         }
@@ -128,6 +138,12 @@ export default class FindMeScreen extends Component {
         console.log("Error getting document:", err);
       });
   };
+
+    setContactsArray = () => {
+        this.state.numbers.map((index, item) => {
+            contactsList[index] = item.number})
+        return contactsList
+    }
 
   render() {
     if (this.state.loaded !== null) {
