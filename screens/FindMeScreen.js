@@ -86,7 +86,7 @@ export default class FindMeScreen extends Component {
 
   sendSms = async () =>{
     const status = await SMS.sendSMSAsync(
-      ['515818473', '‭531574645‬'], 
+      '515818473', 
       'Zgubiłem się, moje położenie to:'+`\n`+
       'https://maps.google.com/?q='+`${JSON.stringify(this.state.region.latitude)}`+','+`${JSON.stringify(this.state.region.longitude)}`
     );
@@ -102,7 +102,7 @@ export default class FindMeScreen extends Component {
               provider={PROVIDER_GOOGLE} // remove if not using Google Maps
               style={styles.map}
               region={this.state.region}>
-              <MapView.Marker coordinate={this.state.marker} />
+              <MapView.Marker coordinate={this.state.marker}/>
             </MapView>
             <View style={styles.buttonContainer}>
             <Button onPress={this.sendSms}  dark rounded>
@@ -110,8 +110,6 @@ export default class FindMeScreen extends Component {
             <FontAwesomeIcon style={styles.faSms} icon={faSms} size={40} color="#fff" />
               </Button>
           </View>
-            <Text>Latitude: {this.state.region.latitude}</Text>
-            <Text>Longitude: {this.state.region.longitude}</Text>          
         </View>
       )
     }
