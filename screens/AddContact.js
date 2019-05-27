@@ -74,7 +74,10 @@ class AddContact extends Component {
                         })
                       });
                     });
-                    console.log('if got through');
+                    Alert.alert('Success', 'Your contact was added succesfully',
+                [
+                    {text: 'OK', onPress: () => console.log('OK Pressed')}
+                ]);
                   } else {
                     usersRef.set({ numbers: [] });
                     usersRef.onSnapshot(doc => {
@@ -85,10 +88,22 @@ class AddContact extends Component {
                         })
                       });
                     });
-                    console.log('else got throough');
                   }
                 });
             }
+
+            deleteContact = (email, name, number) => {
+                db = firebase.firestore();
+                let docRef = db.collection("usercontacts").doc(email);
+                docRef
+                  .update({
+                    numbers: firebase.firestore.FieldValue.arrayRemove({
+                      name: name,
+                      number: number,
+                    })
+                  })
+              };
+
 
       
 

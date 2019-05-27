@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Image, TextInput} from 'react-native';
 import { Container, Header, Content, Button, Text, Left } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
+import * as firebase from "firebase/app";
+
 
 class ChangeUsername extends Component {
     static navigationOptions = {
@@ -12,17 +14,48 @@ class ChangeUsername extends Component {
     headerTintColor: '#fff',
     };
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            name: null, 
+            number: null,
+            email: props.navigation.state.params.email,
+            numbers: [],
+        };
+      }
+
+    getContactFromFirestore = (email) => {
+        db = firebase.firestore();
+        let docRef = db.collection("usercontacts").doc(email);
+        docRef
+          .get()
+          .then(doc => {
+            if (doc.exists) {
+              let data = doc.data();
+              this.setState(
+                {
+                  numbers: data.numbers
+                },
+              );
+
+              console.log(this.state.numbers);
+            } else {
+              console.log("No such document!");
+            }
+          })
+          .catch(function(err) {
+            console.log("Error getting document:", err);
+          });
+      };
 
     render () {
         return(
             <ScrollView>
                 <View style={styles.container}> 
                     <Container style={styles.back}>
-                                    <TextInput
-                                        style={styles.textInput}
-                                        placeholder="Your new username"
-                                        maxLength={20}
-                                        />
+                                    <Button onPress={() => this.getContactFromFirestore(this.state.email)}>
+                                        <Text>Click</Text>
+                                    </Button>
                     </Container>
                 </View>
             </ScrollView>

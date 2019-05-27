@@ -40,10 +40,11 @@ class SettingsScreen extends Component {
                                 </Button>
 
                                 <Button style={styles.button1}  block warning
-                                onPress={() => navigate('ChangeUsername')}>
+                                onPress={() => {navigate('RemoveContact', {email: this.state.email});
+                                console.log(this.state.email)}}>
                                 <FontAwesomeIcon icon={faUserCog} size={80} color="#fff" />
                                 <Text></Text>
-                                <Text style={styles.text}>Change username</Text></Button>
+                                <Text style={styles.text}>Remove Contact</Text></Button>
                         </Row>
                 </Container>
             </View>

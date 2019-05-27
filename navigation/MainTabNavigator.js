@@ -7,7 +7,7 @@ import FindMeScreen from '../screens/FindMeScreen';
 import AuthenticationScreen from '../screens/AuthenticationScreen';
 import SettingsScreen from '../screens/SettingsSreen';
 import AddContact from '../screens/AddContact';
-import ChangeUsername from '../screens/ChangeUsername';
+import RemoveContact from '../screens/RemoveContact';
 
 const MainTabNavigator = createStackNavigator({
   Authentication: {screen: AuthenticationScreen},
@@ -17,7 +17,7 @@ const MainTabNavigator = createStackNavigator({
   FindMe: {screen: FindMeScreen},
   Settings: {screen: SettingsScreen},
   AddContact: {screen: AddContact},
-  ChangeUsername: {screen: ChangeUsername},
+  RemoveContact: {screen: RemoveContact},
 });
 
 const App = createAppContainer(MainTabNavigator);
