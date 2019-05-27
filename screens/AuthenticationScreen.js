@@ -51,7 +51,7 @@ export default class AuthenticationScreen extends React.Component {
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then(navigate("Home", {email}))
+      .then(() => navigate("Home", {email}))
       .catch(function(err) {
         alert("Coś poszło nie tak, spróbuj jeszcze raz!");
         console.log(err.message);
