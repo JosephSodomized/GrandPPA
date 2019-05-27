@@ -5,62 +5,102 @@ import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 
 
 export default class FindMeScreen extends Component {
+  static navigationOptions = {
+    headerTitle: <Image source={require('../assets/images/logo.png')} style={{ width: 100, height: 20 }} />,
+    headerStyle: {
+        backgroundColor: 'rgba(64,64,64,1)',
+    },
+    headerTintColor: '#fff',
+};
+
 
     state = {
         region: {
-            isLoading: true,
-            latitude: null,
-            longitude: null
-        }
+            latitude: 0,
+            longitude: 0,
+            latitudeDelta: 0.015,
+            longitudeDelta: 0.0121,
+        },
+        marker: {
+          latitude: 0,
+          longitude: 0,
+       
+      },
+        watchID: null
     }
+
+    componentWillMount(){
+      this.getCurrentPosition();
+  }
+
+  componentWillUnmount(){
+    this.checkPosition();
+  }
 
     getCurrentPosition = () => {
         navigator.geolocation.getCurrentPosition(position => {
-            const latitude = position.coords.latitude;
-            const longitude = position.coords.longitude;
+            var lat = parseFloat(position.coords.latitude);
+            var long = parseFloat(position.coords.longitude);
             this.setState({
-                latitude,
-                longitude
+                latitude: lat,
+                longitude: long,
+                latitudeDelta: 0.015,
+            longitudeDelta: 0.0121,
             });
         },
             error => Alert.alert(error.message),
-            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+            { enableHighAccuracy: true, timeout: 2000, maximumAge: 100 }
         );
+
+        this.state.watchID = navigator.geolocation.watchPosition((position) =>{
+          var lat = parseFloat(position.coords.latitude);
+          var long = parseFloat(position.coords.longitude);
+
+          var lastRegion = {
+            latitude: lat,
+            longitude: long,
+            latitudeDelta: 0.015,
+            longitudeDelta: 0.0121,
+          }
+
+          this.setState({region: lastRegion})
+          this.setState({marker: lastRegion})
+        })
     }
 
-    static navigationOptions = {
-        headerTitle: <Image source={require('../assets/images/logo.png')} style={{ width: 100, height: 20 }} />,
-        headerStyle: {
-            backgroundColor: 'rgba(64,64,64,1)',
-        },
-        headerTintColor: '#fff',
-    };
-    componentDidMount(){
-        this.getCurrentPosition();
+    checkPosition = () =>{
+      if(this.state.region.latitude !== null || this.state.region.longitude !== null){
+        this.setState(this.state.loaded = true)
+      }
     }
 
+    componentWillUnmount(){
+      navigator.geolocation.clearWatch(this.watchID)
+    }
+    
+    loading(){
+      return(<View><Text>Loading...</Text></View>)
+  }
+    
 
     render() {
+      if(this.state.loaded !== null){
             return (
                 <View style={styles.container}>
                     <View style={styles.container}>
                         <MapView
                             provider={PROVIDER_GOOGLE} // remove if not using Google Maps
                             style={styles.map}
-                            region={{
-                                latitude: this.state.longitude,
-                                longitude: this.state.latitude,
-                                latitudeDelta: 0.015,
-                                longitudeDelta: 0.0121,
-                            }}
-                        >
-                        <MapView.Marker coords = {this.state.region}/>
+                            region={this.state.region}>
+                        <MapView.Marker coordinate={this.state.marker}/>
                         </MapView>
                     </View>
-                    <Text>{this.state.longitude}</Text>
-                    <Text>{this.state.latitude}</Text>
+                    <Text>{this.state.region.latitude}</Text>
+                    <Text>{this.state.region.longitude}</Text>
                 </View>
             )
+        }
+        return this.loading()
     }
 }
 
