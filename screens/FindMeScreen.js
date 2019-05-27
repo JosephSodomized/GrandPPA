@@ -25,7 +25,8 @@ export default class FindMeScreen extends Component {
         name: null, 
         number: null,
         email: props.navigation.state.params.email,
-        numbers: [],
+        numbers: null,
+        contacts: [],
         region: {
             latitude: 0,
             longitude: 0,
@@ -94,9 +95,18 @@ export default class FindMeScreen extends Component {
     return (<View><Text>Loading...</Text></View>)
   }
 
+  componentDidMount() {
+      this.getContactFromFirestore(this.state.email);
+  }
+
   sendSms = async () =>{
+
+      const  contactsList = this.state.numbers.map((item) => {
+            return item.number;
+    });
+
     const status = await SMS.sendSMSAsync(
-      '515818473',
+      contactsList,
       'Zgubiłem się, moje położenie to:'+`\n`+
       'https://maps.google.com/?q='+`${JSON.stringify(this.state.region.latitude)}`+','+`${JSON.stringify(this.state.region.longitude)}`
     );
@@ -117,9 +127,8 @@ export default class FindMeScreen extends Component {
               numbers: data.numbers
             },
           );
-
+          console.log('numbers array');
           console.log(this.state.numbers);
-          console.log(this.state.numbers.name);
         } else {
           console.log("No such document!");
         }
@@ -128,6 +137,8 @@ export default class FindMeScreen extends Component {
         console.log("Error getting document:", err);
       });
   };
+
+    
 
   render() {
     if (this.state.loaded !== null) {
@@ -140,7 +151,7 @@ export default class FindMeScreen extends Component {
               <MapView.Marker coordinate={this.state.marker}/>
             </MapView>
             <View style={styles.buttonContainer}>
-            <Button onPress={this.sendSms()}  dark rounded>
+            <Button onPress={this.sendSms}  dark rounded>
             <Text>Send location</Text>
             <FontAwesomeIcon style={styles.faSms} icon={faSms} size={40} color="#fff" />
               </Button>
