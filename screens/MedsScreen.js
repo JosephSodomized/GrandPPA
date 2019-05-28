@@ -33,17 +33,22 @@ const substanceNameAPI =
   "https://api.fda.gov/drug/label.json?search=openfda.substance_name:";
 export default class MedsScreen extends React.Component {
   static navigationOptions = {
-    headerTitle: <Image source={require('../assets/images/logo.png')} style={{ width: 100, height: 20 }} />,
+    headerTitle: (
+      <Image
+        source={require("../assets/images/logo.png")}
+        style={{ width: 100, height: 20 }}
+      />
+    ),
     headerStyle: {
-      backgroundColor: 'rgba(64,64,64,1)',
+      backgroundColor: "rgba(64,64,64,1)"
     },
-    headerTintColor: '#fff',
+    headerTintColor: "#fff"
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      medicines: [],
+      medList: [],
       email: props.navigation.state.params.email,
       modalVisible: false,
       medName: "",
@@ -70,36 +75,17 @@ export default class MedsScreen extends React.Component {
     let usermeds = db.collection("usermeds");
     const usersRef = usermeds.doc(email);
 
-    usersRef.get().then(docSnapshot => {
-      if (docSnapshot.exists) {
-        usersRef.onSnapshot(doc => {
-          usersRef.update({
-            medicines: firebase.firestore.FieldValue.arrayUnion({
-              name: name,
-              date: date,
-              time: time,
-              amount: amount,
-              medInfo: medInfo
-            })
-          });
-          this.getMedFromFirestore(this.state.email);
-        });
-      } else {
-        usersRef.set({ medicines: [] });
-        usersRef.onSnapshot(doc => {
-          usersRef.update({
-            medicines: firebase.firestore.FieldValue.arrayUnion({
-              name: name,
-              date: date,
-              time: time,
-              amount: amount,
-              medInfo: medInfo
-            })
-          });
-        });
-        this.getMedFromFirestore(this.state.email, true);
-      }
+    usersRef.update({
+      medicines: firebase.firestore.FieldValue.arrayUnion({
+        name: name,
+        date: date,
+        time: time,
+        amount: amount,
+        medInfo: medInfo
+      })
     });
+
+    this.getMedFromFirestore(email);
   }
 
   getMedFromFirestore = (email, spinner) => {
@@ -114,7 +100,7 @@ export default class MedsScreen extends React.Component {
           let data = doc.data();
           this.setState(
             {
-              medicines: data.medicines
+              medList: data.medicines
             },
             () => {
               if (spinner) this.setSpinnerVisible(false);
@@ -122,7 +108,6 @@ export default class MedsScreen extends React.Component {
           );
         } else {
           if (spinner) this.setSpinnerVisible(false);
-          console.log("No such document!");
         }
       })
       .catch(function(err) {
@@ -130,23 +115,17 @@ export default class MedsScreen extends React.Component {
       });
   };
 
-  deleteMed = (email, name, date, time, amount, medInfo) => {
+  deleteMed = (email, item) => {
     db = firebase.firestore();
     let docRef = db.collection("usermeds").doc(email);
     docRef
       .update({
-        medicines: firebase.firestore.FieldValue.arrayRemove({
-          name: name,
-          date: date,
-          time: time,
-          amount: amount,
-          medInfo: medInfo
-        })
+        medicines: firebase.firestore.FieldValue.arrayRemove(item)
       })
       .then(this.getMedFromFirestore(email, false));
   };
 
-  componentWillMount() {
+  componentDidMount() {
     this.getMedFromFirestore(this.state.email, true);
   }
 
@@ -163,7 +142,7 @@ export default class MedsScreen extends React.Component {
         date,
         time,
         amount,
-        result.results[0].indications_and_usage
+        result.results[0].indications_and_usage[0]
       );
       return;
     }
@@ -178,7 +157,7 @@ export default class MedsScreen extends React.Component {
         date,
         time,
         amount,
-        result.results[0].indications_and_usage
+        result.results[0].indications_and_usage[0]
       );
       return;
     }
@@ -193,7 +172,7 @@ export default class MedsScreen extends React.Component {
         date,
         time,
         amount,
-        result.results[0].indications_and_usage
+        result.results[0].indications_and_usage[0]
       );
       return;
     }
@@ -208,7 +187,7 @@ export default class MedsScreen extends React.Component {
         date,
         time,
         amount,
-        result.results[0].indications_and_usage
+        result.results[0].indications_and_usage[0]
       );
       return;
     }
@@ -219,21 +198,22 @@ export default class MedsScreen extends React.Component {
   }
 
   render() {
-    const MedicinesList = this.state.medicines.map((item, index) => (
-      <ListItem icon key={index} title={item.name}>
+    const MedicinesList = this.state.medList.map((item, index) => (
+      <ListItem style={styles.listItem} icon key={index} title={item.name}>
         <Left>
           <Icon
             type="AntDesign"
             name="question"
             ios="question"
+            style={styles.listItem}
             onPress={() => alert(item.medInfo)}
           />
         </Left>
         <Body>
-          <Text>
+          <Text style={styles.listItem}>
             {item.name} - {item.amount} pills
           </Text>
-          <Text note>
+          <Text note style={styles.listItem}>
             {item.date} {item.time}
           </Text>
         </Body>
@@ -243,14 +223,7 @@ export default class MedsScreen extends React.Component {
             name="close"
             ios="close"
             onPress={() => {
-              this.deleteMed(
-                this.state.email,
-                this.state.medicines[index].name,
-                this.state.medicines[index].date,
-                this.state.medicines[index].time,
-                this.state.medicines[index].amount,
-                this.state.medicines[index].medInfo
-              );
+              this.deleteMed(this.state.email, item);
             }}
           />
         </Right>
@@ -259,7 +232,7 @@ export default class MedsScreen extends React.Component {
 
     return (
       <View style={{ flex: 1 }}>
-        <Container style={{ flex: 1,  backgroundColor: 'rgba(64,64,64,1)' }}>
+        <Container style={{ flex: 1, backgroundColor: "rgba(64,64,64,1)" }}>
           <Grid>
             <Row style={{ height: "5%" }}>
               <Col />
@@ -279,7 +252,7 @@ export default class MedsScreen extends React.Component {
             <Row style={{ height: "80%" }}>
               <Col>
                 {this.state.spinnerVisible ? (
-                  <Spinner color="gray" />
+                  <Spinner color="white" />
                 ) : (
                   <List>{MedicinesList}</List>
                 )}
@@ -416,5 +389,7 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
     marginRight: "auto"
   },
-
+  listItem: {
+    color: "white"
+  }
 });
