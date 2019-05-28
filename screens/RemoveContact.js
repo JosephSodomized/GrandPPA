@@ -6,6 +6,8 @@ import * as firebase from "firebase/app";
 import { ListItem, withTheme } from 'react-native-elements';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faUserMinus} from '@fortawesome/free-solid-svg-icons';
+import "@firebase/firestore";
+
 
 
 class ChangeUsername extends Component {
@@ -42,7 +44,6 @@ class ChangeUsername extends Component {
               );
 
               console.log(this.state.numbers);
-              console.log(this.state.numbers.name);
             } else {
               console.log("No such document!");
             }
@@ -50,6 +51,8 @@ class ChangeUsername extends Component {
           .catch(function(err) {
             console.log("Error getting document:", err);
           });
+
+          console.log(this.state.numbers);
       };
 
       
@@ -72,7 +75,7 @@ class ChangeUsername extends Component {
 
       };
 
-      componentWillMount() {
+      componentDidMount() {
           this.getContactFromFirestore(this.state.email);
       }
 

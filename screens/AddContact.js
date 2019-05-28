@@ -6,6 +6,8 @@ import { Col, Row, Grid } from "react-native-easy-grid";
 import Input from '../components/Input';
 import firebaseConfig from '../firebaseConfig';
 import * as firebase from "firebase/app";
+import "@firebase/firestore";
+
 
 class AddContact extends Component {
     static navigationOptions = {
@@ -53,44 +55,29 @@ class AddContact extends Component {
         }
       }
 
-    
 
-             addContact(email, name, number) {
-                db = firebase.firestore();
-                let usercontacts = db.collection("usercontacts");
-                const usersRef = usercontacts.doc(email);
+      addContact(email, name, number) {
+              db = firebase.firestore();
+              let usercontacts = db.collection("usercontacts");
+              const usersRef = usercontacts.doc(email);
 
-                console.log('add contact fun started get started');
+              console.log('add contact fun started get started');
 
-             
-                usersRef.get().then(docSnapshot => {
-                    console.log('userRef get started');
-                  if (docSnapshot.exists) {
-                    usersRef.onSnapshot(doc => {
-                      usersRef.update({
-                        numbers: firebase.firestore.FieldValue.arrayUnion({
-                            name: name,                         
-                            number: number,
-                        })
-                      });
-                    });
-                    Alert.alert('Success', 'Your contact was added succesfully',
-                [
-                    {text: 'OK', onPress: () => console.log('OK Pressed')}
-                ]);
-                  } else {
-                    usersRef.set({ numbers: [] });
-                    usersRef.onSnapshot(doc => {
-                      usersRef.update({
-                        numbers: firebase.firestore.FieldValue.arrayUnion({
+           
+              console.log('userRef get started');
+                
+                    usersRef.update({
+                      numbers: firebase.firestore.FieldValue.arrayUnion({
+                          name: name,                         
                           number: number,
-                          name: name,
-                        })
-                      });
+                      })
                     });
-                  }
-                });
-            }
+                  
+                  Alert.alert('Success', 'Your contact was added succesfully',
+              [
+                  {text: 'OK', onPress: () => console.log('OK Pressed')}
+              ]);
+          }
      
 
     render () {
