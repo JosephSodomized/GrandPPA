@@ -41,14 +41,9 @@
 ![61775788_507420316700759_7164721493790687232_n (1)](https://user-images.githubusercontent.com/28458783/58748297-af166a80-8476-11e9-9c0f-addfdf165f34.jpg)
 ![kontakty](https://user-images.githubusercontent.com/28458783/58749607-5354dd00-8488-11e9-9efa-ced94cf41e9b.jpg)
 
-
-
-
-
-
   
 ## Składowe projektu:
-* [Prototyp](http://www.google.com)
+* [Prototyp](https://xd.adobe.com/view/8d14de2d-d99a-4df1-7e19-480e54e52a29-fb25/?fullscreen)
 * [Aplikacja uruchamiana za pomocą Expo](https://expo.io/)
 * [Trello](https://trello.com/b/RP8mRNb0)
 * [Repozytorium](http://www.github.com/JosephSodomized/GrandPPA)
