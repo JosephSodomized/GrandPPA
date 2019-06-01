@@ -49,6 +49,6 @@
   
 ## Składowe projektu:
 * [Prototyp](http://www.google.com)
-* [Aplikacja](http://www.google.com)
+* [Aplikacja uruchamiana za pomocą Expo](https://expo.io/)
 * [Trello](https://trello.com/b/RP8mRNb0)
 * [Repozytorium](http://www.github.com/JosephSodomized/GrandPPA)
