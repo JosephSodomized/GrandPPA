@@ -15,27 +15,27 @@
 ### Celem aplikacji jest wsparcie osób starszych. Dzisiejsze smartfony przytłaczają funkcjonalnościami. GrandPPA zbiera wszystkie ważne funkcjonalności w jednym miejscu. Już nigdy nie zapomnisz o lekach, a kiedy będziesz potrzebował wsparcia ratunkowego lub wsparcia od swoich znajomych lub rodziny, zrobisz to jednym przyciskiem.
 
 ## Funkcjonalności
-### Ekran ładowania
-![61777705_478390512900295_2603280429448429568_n](https://user-images.githubusercontent.com/28458783/58748263-3ca58a80-8476-11e9-8d28-32e5186fd707.jpg)
 
 ### Logowanie
-![61513370_438626070021052_2394549064722022400_n](https://user-images.githubusercontent.com/28458783/58748228-a1acb080-8475-11e9-92ca-b3829db6f48a.jpg)
+![61513370_438626070021052_2394549064722022400_n](https://user-images.githubusercontent.com/28458783/58748292-9a39d700-8476-11e9-9ce7-5eb36938c387.jpg)
 
 ### Ekran startowy
-![61474307_453478945414255_7771261744608968704_n](https://user-images.githubusercontent.com/28458783/58748222-9194d100-8475-11e9-8d63-477f7fa4d6f4.jpg)
+![61474307_453478945414255_7771261744608968704_n](https://user-images.githubusercontent.com/28458783/58748290-90b06f00-8476-11e9-8e35-fc8210b58235.jpg)
+
 
 ### Lista leków
-![61777705_478390512900295_2603280429448429568_n](https://user-images.githubusercontent.com/28458783/58748263-3ca58a80-8476-11e9-8d28-32e5186fd707.jpg)
+![61777705_478390512900295_2603280429448429568_n](https://user-images.githubusercontent.com/28458783/58748300-b76ea580-8476-11e9-9661-3380eac82962.jpg)
 
 ### Znajdź mnie
   
 ### Pomóż mi
-![61643760_2263692990373953_2689608567723393024_n](https://user-images.githubusercontent.com/28458783/58748255-2bf51480-8476-11e9-984e-96d1942111eb.jpg)
-
+![61643760_2263692990373953_2689608567723393024_n](https://user-images.githubusercontent.com/28458783/58748295-a887f300-8476-11e9-8f80-fd4da8e91684.jpg)
 
 ### Kontakty
-![61521193_1226016130887244_4279182788676026368_n](https://user-images.githubusercontent.com/28458783/58748253-20a1e900-8476-11e9-8c7f-7b00d2f63321.jpg)
-![61775788_507420316700759_7164721493790687232_n (1)](https://user-images.githubusercontent.com/28458783/58748262-34e5e600-8476-11e9-9496-2b83cbef4cc8.jpg)
+![61521193_1226016130887244_4279182788676026368_n](https://user-images.githubusercontent.com/28458783/58748294-a160e500-8476-11e9-9358-2d2f2821e4e7.jpg)
+![61775788_507420316700759_7164721493790687232_n (1)](https://user-images.githubusercontent.com/28458783/58748297-af166a80-8476-11e9-9c0f-addfdf165f34.jpg)
+
+
 
 
 
