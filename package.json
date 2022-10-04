@@ -15,7 +15,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.18",
     "@fortawesome/free-solid-svg-icons": "^5.8.2",
     "@fortawesome/react-native-fontawesome": "^0.1.0",
-    "expo": "^32.0.0",
+    "expo": "^46.0.14",
     "firebase": "^6.0.4",
     "native-base": "^2.12.1",
     "node-modules": "^1.0.1",
